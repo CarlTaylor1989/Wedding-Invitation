@@ -1,0 +1,42 @@
+section {
+  .section-inner {
+    padding: 120px 0;
+    .section-heading {
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 34px;
+      letter-spacing: 5px;
+    }
+    .thin-hr {
+      margin: 30px 0 40px;
+      width: 100%;
+      clear: both;
+      display: block;
+      position: relative;
+      border: none;
+      text-align: center;
+      &:after {
+        content: '';
+        position: absolute;
+        width: 180px;
+        height: 2px;
+        background-color: #333;
+        left: 50%;
+        margin-left: -80px;
+      }
+      &:before {
+        font-family: 'FontAwesome';
+        content: "\f004";
+        color: #C10E1F;
+        position: absolute;
+        width: 180px;
+        margin-left: -80px;
+        margin-top: -10px;
+        z-index: 5;
+      }
+    }
+  }
+  &#our-people {
+    background-color: #F7F7F7;
+  }
+}

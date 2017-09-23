@@ -1,0 +1,66 @@
+(function() {
+  'use strict';
+
+  angular
+    .module('app.core')
+    .factory('dataservice', dataservice);
+
+  dataservice.$inject = ['$http', '$q', 'exception', 'logger'];
+  /* @ngInject */
+  function dataservice($http, $q, exception, logger) {
+    var id;
+    var service = {
+      getPeople: getPeople,
+      getPerson: getPerson,
+      getMessageCount: getMessageCount,
+      postUser: postUser
+    };
+
+    return service;
+
+    function getMessageCount() { return $q.when(72); }
+
+    function getPeople() {
+      return $http.get('/api/people')
+        .then(success)
+        .catch(fail);
+
+      function success(response) {
+        return response.data;
+      }
+
+      function fail(e) {
+        return exception.catcher('XHR Failed for getPeople')(e);
+      }
+    }
+
+    function getPerson(id) {
+      return $http.get('/api/person/' + id)
+        .then(success)
+        .catch(fail);
+
+        function success(r) {
+          return r.data;
+        }
+
+        function fail(e) {
+          return exception.catcher('XHR Failed for getPerson')(e);
+        }
+    }
+
+    function postUser() {
+      return $http.post('/api/users')
+        .then(success)
+        .catch(fail);
+
+        function success(r) {
+          return r.data;
+        }
+
+        function fail(e) {
+          return exception.catcher('XHR Failed for postUser')(e);
+        }
+    }
+
+  }
+})();
