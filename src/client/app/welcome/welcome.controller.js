@@ -16,10 +16,11 @@
     vm.formComplete = false;
     vm.person = person;
     vm.post = {
+      'uniqueId': person.uniqueUri,
       'name': person.name,
       'attending': '',
       'menu': [],
-      'diet': '',
+      'dietRequirements': '',
       'message': ''
     };
     vm.title = 'Welcome';
@@ -60,6 +61,7 @@
       if(vm.attending === false) {
         vm.menu = ''; // Clear menu model
         vm.post.attending = false; // Set attending to No
+        dataservice.postNotAttending(vm.post);
       }
     }
 
@@ -78,17 +80,33 @@
     }
 
     function postPerson(userData) {
-    $http.post('/api/users', userData)
-      .success(function(data) {
-        console.log('Successfully posted '+ data);
-        $timeout(function() {
-          postEmail(data);
-          vm.formComplete = true;
-        }, 1000);
-      })
-      .error(function(data) {
-        console.log('Error while posting: ' + data);
+      dataservice.postTest(userData).then(function(response) {
+        console.log(response);
       });
+      // var FINAL_API_URL = 'https://api.mlab.com/api/1/databases/invitations/collections/accepted?apiKey=uOw09VD_O3zuzZMHw4Bb04gYgDPk44tK';
+      // $http({
+      //   url: FINAL_API_URL,
+      //   method: "POST",
+      //   data: userData
+      // }).then(function(response) {
+      //   $timeout(function() {
+      //     postEmail(response.data);
+      //     vm.formComplete = true;
+      //   }, 1000);
+      //   console.log('SUCCESS', response);
+      // }, function(response) {
+      //   console.log('ERROR', response);
+      // });
+      // $http.post('/api/users', userData).success(function(data) {
+      //   console.log('Successfully posted '+ data);
+      //   $timeout(function() {
+      //     postEmail(data);
+      //     vm.formComplete = true;
+      //   }, 1000);
+      // })
+      // .error(function(data) {
+      //   console.log('Error while posting: ' + data);
+      // });
     }
 
     function postEmail(data) {
