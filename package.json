@@ -5,8 +5,7 @@
   "scripts": {
     "init": "npm install",
     "start": "node src/server/app.js",
-    "test": "gulp test",
-    "postinstall": "./node_modules/bower/bin/bower install"
+    "test": "gulp test"
   },
   "dependencies": {
     "body-parser": "~1.8.2",
