@@ -45,13 +45,13 @@
         .then(success)
         .catch(fail);
 
-        function success(r) {
-          return r.data;
-        }
+      function success(r) {
+        return r.data;
+      }
 
-        function fail(e) {
-          return exception.catcher('XHR Failed for getPerson')(e);
-        }
+      function fail(e) {
+        return exception.catcher('XHR Failed for getPerson')(e);
+      }
     }
 
     function postTest(data) {
@@ -83,13 +83,13 @@
         .then(success)
         .catch(fail);
 
-        function success(r) {
-          return r.data;
-        }
+      function success(r) {
+        return r.data;
+      }
 
-        function fail(e) {
-          return exception.catcher('XHR Failed for postUser')(e);
-        }
+      function fail(e) {
+        return exception.catcher('XHR Failed for postUser')(e);
+      }
     }
 
   }

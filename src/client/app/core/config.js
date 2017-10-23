@@ -3,6 +3,8 @@
 
   var core = angular.module('app.core');
 
+  var WOW;
+
   core.config(toastrConfig);
 
   toastrConfig.$inject = ['toastr'];
@@ -31,10 +33,10 @@
     routerHelperProvider.configure({ docTitle: config.appTitle + ': ' });
   }
 
-  core.config(wowInit);
-
   function wowInit() {
     new WOW().init();
   }
+
+  core.config(wowInit);
 
 })();

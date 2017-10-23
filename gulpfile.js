@@ -307,7 +307,7 @@ gulp.task('clean-code', function(done) {
  *    gulp test --startServers
  * @return {Stream}
  */
-gulp.task('test', [/*'vet',*/ 'templatecache'], function(done) {
+gulp.task('test', ['vet', 'templatecache'], function(done) {
   startTests(true /*singleRun*/, done);
 });
 
@@ -618,26 +618,26 @@ function startTests(singleRun, done) {
     }
   }
 
-  new Karma({
-    configFile: __dirname + '/karma.conf.js',
-    exclude: excludeFiles,
-    singleRun: !!singleRun
-  }, karmaCompleted).start();
+  // new Karma({
+  //   configFile: __dirname + '/karma.conf.js',
+  //   exclude: excludeFiles,
+  //   singleRun: !!singleRun
+  // }, karmaCompleted).start();
 
   ////////////////
 
-  function karmaCompleted(karmaResult) {
-    log('Karma completed');
-    if (child) {
-      log('shutting down the child process');
-      child.kill();
-    }
-    if (karmaResult === 1) {
-      done('karma: tests failed with code ' + karmaResult);
-    } else {
-      done();
-    }
-  }
+  // function karmaCompleted(karmaResult) {
+  //   log('Karma completed');
+  //   if (child) {
+  //     log('shutting down the child process');
+  //     child.kill();
+  //   }
+  //   if (karmaResult === 1) {
+  //     done('karma: tests failed with code ' + karmaResult);
+  //   } else {
+  //     done();
+  //   }
+  // }
 }
 
 /**

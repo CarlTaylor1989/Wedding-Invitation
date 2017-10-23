@@ -5,7 +5,16 @@
     .module('app.layout')
     .controller('NavController', NavController);
 
-  NavController.$inject = ['$scope', '$state', 'routerHelper', '$window', '$stateParams', '$rootScope', '$timeout', '$http'];
+  NavController.$inject = [
+    '$scope',
+    '$state',
+    'routerHelper',
+    '$window',
+    '$stateParams',
+    '$rootScope',
+    '$timeout',
+    '$http'
+  ];
   /* @ngInject */
   function NavController($scope, $state, routerHelper, $window, $stateParams, $rootScope, $timeout, $http) {
     var vm = this;
@@ -45,9 +54,9 @@
       return $state.current.title.substr(0, menuName.length) === menuName ? 'active' : '';
     }
 
-    $window.onscroll = function(){
+    $window.onscroll = function() {
       vm.currentPos = document.body.scrollTop || document.documentElement.scrollTop || 0;
-      if(vm.currentPos >= vm.changePos ) {
+      if (vm.currentPos >= vm.changePos) {
         vm.isScrolled = true;
         $scope.$apply();
       } else {

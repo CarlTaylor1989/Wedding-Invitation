@@ -33,9 +33,7 @@ function getPerson(req, res, next) {
 }
 
 function postUser(req, res, next) {
-  console.log('post user route')
   UserFactory.postUser(req).then(function(user) {
-    console.log('Successfully posted '+ JSON.stringify(user));
     res.json(user);
   });
 }
@@ -54,16 +52,17 @@ function postEmail(req, res, next) {
     to: 'carltaylor1989@gmail.com'
   };
 
-  if(req.body.attending === false) {
+  if (req.body.attending === false) {
     mailOptions.subject = req.body.name + ' are sadly not attending.';
     mailOptions.html = '';
   } else {
     mailOptions.subject = req.body.name + ' are attending!';
-    mailOptions.html = '<strong>' + req.body.name + ' are attending!</strong><br /><br />Their meal choices are: ' + req.body.menu[0] +' and ' + req.body.menu[1];
+    mailOptions.html = '<strong>' + req.body.name + ' are attending!</strong>';
+    mailOptions.html += '<br /><br />Their meal choices are: ' + req.body.menu[0] + ' and ' + req.body.menu[1];
   }
 
-  transporter.sendMail(mailOptions, function(error, info){
-    if(error){
+  transporter.sendMail(mailOptions, function(error, info) {
+    if (error) {
       console.log(error);
       res.json({yo: 'error'});
     } else {
