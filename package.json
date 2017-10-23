@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "scripts": {
     "init": "npm install",
-    "install": "bower install",
+    "install": "./node_modules/bower/bin/bower install",
     "postinstall": "webdriver-manager update",
     "start": "node src/server/app.js",
     "test": "gulp test",
