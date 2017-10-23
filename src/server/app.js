@@ -10,8 +10,7 @@ var logger = require('morgan');
 var port = process.env.PORT || 8001;
 var four0four = require('./utils/404')();
 
-// var environment = process.env.NODE_ENV;
-var environment = 'build';
+var environment = process.env.NODE_ENV;
 
 // Sets the connection to MongoDB
 mongoose.connect('mongodb://localhost/WeddingInviteApp', { useMongoClient: true });
@@ -30,6 +29,7 @@ console.log('NODE_ENV=' + environment);
 switch (environment) {
   case 'build':
     console.log('** BUILD **');
+    console.log(__dirname);
     app.use(express.static('./build/'));
     // Any invalid calls for templateUrls are under app/* and should return 404
     app.use('/app/*', function (req, res, next) {
