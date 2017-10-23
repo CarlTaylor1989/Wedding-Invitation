@@ -11,7 +11,7 @@ var port = process.env.PORT || 8001;
 var four0four = require('./utils/404')();
 
 // var environment = process.env.NODE_ENV;
-var environment = build;
+var environment = 'build';
 
 // Sets the connection to MongoDB
 mongoose.connect('mongodb://localhost/WeddingInviteApp', { useMongoClient: true });
