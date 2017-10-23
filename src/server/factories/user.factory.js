@@ -13,13 +13,13 @@ function getUsers() {
     var query = Users.find({});
     query.exec(function(err, users) {
       if (err) {
-        return reject(err);
+        throw err;
       }
       // If no errors are found, it responds with a JSON of all users
       return resolve(users);
     });
   }, function(error) {
-    return reject(error);
+    throw error;
   });
 }
 
@@ -30,12 +30,12 @@ function postUser(req) {
 
     newUser.save(function(err) {
       if (err) {
-        reject(err);
+        throw err;
       }
       // If no errors are found, it responds with a JSON of the new user
       resolve(req.body);
     });
   }, function(error) {
-    return reject(error);
+    throw error;
   });
 }

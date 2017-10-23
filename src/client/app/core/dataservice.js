@@ -61,7 +61,6 @@
         data: data
       }).then(function(response) {
         return response;
-        console.log('SUCCESS', response);
       }, function(response) {
         return exception.catcher('XHR Failed for postTest')(response);
       });

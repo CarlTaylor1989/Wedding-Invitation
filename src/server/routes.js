@@ -5,8 +5,6 @@ var data = require('./data');
 var info = require('./utils/info');
 var UserFactory = require('./factories/user.factory');
 
-console.log(UserFactory);
-
 router.get('/people', getPeople);
 router.get('/person/:id', getPerson);
 router.post('/users', postUser);
