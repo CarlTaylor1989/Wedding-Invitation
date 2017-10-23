@@ -3,8 +3,6 @@
 
   var core = angular.module('app.core');
 
-  var WOW;
-
   core.config(toastrConfig);
 
   toastrConfig.$inject = ['toastr'];
