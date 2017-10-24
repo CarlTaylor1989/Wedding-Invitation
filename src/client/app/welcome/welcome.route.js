@@ -35,7 +35,6 @@
           resolve: {
             person: function(dataservice, $filter, $stateParams) {
               console.log($stateParams);
-              console.log(dataservice.getPersonTest($stateParams.personId))
               return dataservice.getPersonTest($stateParams.personId);
             }
           },

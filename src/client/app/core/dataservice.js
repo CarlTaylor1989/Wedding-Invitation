@@ -61,17 +61,12 @@
     }
 
     function getPersonTest(id) {
-      console.log('GOT HERE 1', id);
-      console.log(API + PEOPLE + '?q={"id":' + id + '}' + KEY);
       return $http({
-        url: 'https://api.mlab.com/api/1/databases/invitations/collections/people?apiKey=uOw09VD_O3zuzZMHw4Bb04gYgDPk44tK',
-        method: 'GET',
-        data: data
+        url: 'https://api.mlab.com/api/1/databases/invitations/collections/people?q={id:'+ id +'}&apiKey=uOw09VD_O3zuzZMHw4Bb04gYgDPk44tK',
+        method: 'GET'
       }).then(function(response) {
-        console.log('response')
-        return response;
+        return response.data[0];
       }, function(response) {
-        console.log('response')
         return exception.catcher('XHR Failed for postTest')(response);
       });
     }
