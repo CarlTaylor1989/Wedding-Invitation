@@ -35,7 +35,7 @@
           resolve: {
             person: function(dataservice, $filter, $stateParams) {
               console.log($stateParams);
-              return dataservice.getPerson($stateParams.personId);
+              return dataservice.getPersonTest($stateParams.personId);
             }
           },
           controller: 'WelcomeController',
