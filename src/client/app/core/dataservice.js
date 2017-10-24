@@ -67,10 +67,10 @@
         method: 'GET',
         data: data
       }).then(function(response) {
-        console.log(response)
+        console.log('response')
         return response;
       }, function(response) {
-        console.log(response)
+        console.log('response')
         return exception.catcher('XHR Failed for postTest')(response);
       });
     }
