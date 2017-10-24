@@ -47,10 +47,12 @@
         .catch(fail);
 
       function success(r) {
+        console.log(r);
         return r.data;
       }
 
       function fail(e) {
+        console.log(e);
         return exception.catcher('XHR Failed for getPerson')(e);
       }
     }
