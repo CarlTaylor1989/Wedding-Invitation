@@ -41,6 +41,7 @@
     }
 
     function getPerson(id) {
+      console.log('GOT HERE 1');
       return $http.get('/api/person/' + id)
         .then(success)
         .catch(fail);
