@@ -29,7 +29,7 @@ console.log('NODE_ENV=' + environment);
 switch (environment) {
   case 'build':
     console.log('** BUILD **');
-    console.log(__dirname);
+    console.log(express.static('./build/'));
     app.use(express.static('./build/'));
     // Any invalid calls for templateUrls are under app/* and should return 404
     app.use('/app/*', function (req, res, next) {
