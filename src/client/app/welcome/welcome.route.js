@@ -34,6 +34,7 @@
           templateUrl: 'app/welcome/welcome.html',
           resolve: {
             person: function(dataservice, $filter, $stateParams) {
+              console.log('here', $stateParams);
               return dataservice.getPerson($stateParams.personId);
             }
           },
