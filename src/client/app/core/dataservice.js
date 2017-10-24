@@ -63,7 +63,7 @@
       console.log('GOT HERE 1', id);
       console.log(API + PEOPLE + '?q={"id":' + id + '}' + KEY);
       return $http({
-        url: API + PEOPLE + '?q={"id":' + id + '}' + KEY,
+        url: 'https://api.mlab.com/api/1/databases/invitations/collections/people?q={%22id%22:1}&apiKey=uOw09VD_O3zuzZMHw4Bb04gYgDPk44tK',
         method: 'GET',
         data: data
       }).then(function(response) {
