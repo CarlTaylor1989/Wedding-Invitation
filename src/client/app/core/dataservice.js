@@ -12,10 +12,12 @@
     var API = 'https://api.mlab.com/api/1/databases/';
     var KEY = '?apiKey=uOw09VD_O3zuzZMHw4Bb04gYgDPk44tK';
     var USERS = 'invitations/collections/accepted';
+    var PEOPLE = 'invitations/collections/people';
 
     var service = {
       getPeople: getPeople,
       getPerson: getPerson,
+      getPersonTest: getPersonTest,
       getMessageCount: getMessageCount,
       postTest: postTest,
       postUser: postUser,
@@ -42,7 +44,7 @@
 
     function getPerson(id) {
       console.log('GOT HERE 1');
-      return $http.get('/build/api/person/' + id)
+      return $http.get('/api/person/' + id)
         .then(success)
         .catch(fail);
 
@@ -55,6 +57,21 @@
         console.log(e);
         return exception.catcher('XHR Failed for getPerson')(e);
       }
+    }
+
+    function getPersonTest(id) {
+      console.log('GOT HERE 1');
+      return $http({
+        url: API + PEOPLE + KEY,
+        method: 'GET',
+        data: data
+      }).then(function(response) {
+        console.log(response)
+        return response;
+      }, function(response) {
+        console.log(response)
+        return exception.catcher('XHR Failed for postTest')(response);
+      });
     }
 
     function postTest(data) {
