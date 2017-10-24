@@ -60,7 +60,7 @@
     }
 
     function getPersonTest(id) {
-      console.log('GOT HERE 1');
+      console.log('GOT HERE 1', id);
       return $http({
         url: API + PEOPLE + KEY,
         method: 'GET',
