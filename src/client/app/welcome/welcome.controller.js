@@ -38,6 +38,7 @@
     activate();
 
     function activate() {
+      console.log('here activate()');
       var promises = [getMessageCount(), getPeople()];
       return $q.all(promises).then(function() {
         logger.info('Activated Welcome View');
