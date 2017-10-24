@@ -29,6 +29,7 @@
     function getMessageCount() { return $q.when(72); }
 
     function getPeople() {
+      console.log('here?')
       return $http.get('/api/people')
         .then(success)
         .catch(fail);
@@ -63,7 +64,7 @@
       console.log('GOT HERE 1', id);
       console.log(API + PEOPLE + '?q={"id":' + id + '}' + KEY);
       return $http({
-        url: 'https://api.mlab.com/api/1/databases/invitations/collections/people?q={%22id%22:1}&apiKey=uOw09VD_O3zuzZMHw4Bb04gYgDPk44tK',
+        url: 'https://api.mlab.com/api/1/databases/invitations/collections/people?apiKey=uOw09VD_O3zuzZMHw4Bb04gYgDPk44tK',
         method: 'GET',
         data: data
       }).then(function(response) {
