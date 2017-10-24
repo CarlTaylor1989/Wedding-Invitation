@@ -10,9 +10,8 @@
   function dataservice($http, $q, exception, logger) {
 
     var API = 'https://api.mlab.com/api/1/databases/';
-    var KEY = '&apiKey=uOw09VD_O3zuzZMHw4Bb04gYgDPk44tK';
+    var KEY = '?apiKey=uOw09VD_O3zuzZMHw4Bb04gYgDPk44tK';
     var USERS = 'invitations/collections/accepted';
-    var PEOPLE = 'invitations/collections/people';
 
     var service = {
       getPeople: getPeople,
