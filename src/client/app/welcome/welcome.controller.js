@@ -38,8 +38,7 @@
     activate();
 
     function activate() {
-      console.log('here activate()');
-      var promises = [getMessageCount(), getPeople()];
+      var promises = [getMessageCount()];
       return $q.all(promises).then(function() {
         logger.info('Activated Welcome View');
       });
@@ -72,14 +71,6 @@
         vm.post.attending = false; // Set attending to No
         dataservice.postNotAttending(vm.post);
       }
-    }
-
-    function getPeople() {
-      console.log('here getPeople()');
-      return dataservice.getPeople().then(function(data) {
-        vm.people = data;
-        return vm.people;
-      });
     }
 
     function getMessageCount() {

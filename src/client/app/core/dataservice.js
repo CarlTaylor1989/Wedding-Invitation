@@ -13,6 +13,8 @@
     var KEY = '?apiKey=uOw09VD_O3zuzZMHw4Bb04gYgDPk44tK';
     var USERS = 'invitations/collections/accepted';
 
+    var PEOPLE_ENDPOINT = 'https://api.mlab.com/api/1/databases/invitations/collections/people';
+
     var service = {
       getPeople: getPeople,
       getPerson: getPerson,
@@ -43,25 +45,19 @@
     }
 
     function getPerson(id) {
-      console.log('GOT HERE 1');
-      return $http.get('/api/person/' + id)
-        .then(success)
-        .catch(fail);
-
-      function success(r) {
-        console.log(r);
-        return r.data;
-      }
-
-      function fail(e) {
-        console.log(e);
-        return exception.catcher('XHR Failed for getPerson')(e);
-      }
+      return $http({
+        url: PEOPLE_ENDPOINT + '?q={id:'+ id +'}&apiKey=uOw09VD_O3zuzZMHw4Bb04gYgDPk44tK',
+        method: 'GET'
+      }).then(function(response) {
+        return response.data[0];
+      }, function(response) {
+        return exception.catcher('XHR Failed for postTest')(response);
+      });
     }
 
     function getPersonTest(id) {
       return $http({
-        url: 'https://api.mlab.com/api/1/databases/invitations/collections/people?q={id:'+ id +'}&apiKey=uOw09VD_O3zuzZMHw4Bb04gYgDPk44tK',
+        url: PEOPLE_ENDPOINT + '?q={id:'+ id +'}&apiKey=uOw09VD_O3zuzZMHw4Bb04gYgDPk44tK',
         method: 'GET'
       }).then(function(response) {
         return response.data[0];
