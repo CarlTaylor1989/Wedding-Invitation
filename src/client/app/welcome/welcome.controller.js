@@ -50,13 +50,13 @@
         vm.validationMsg.menu = true;
         return false;
       } else {
-        postPerson(vm.post);
+        postPerson(vm.post, vm.person);
       }
     }
 
     function attendingForm(bool) {
       vm.attending = bool;
-      vm.post.attending = true; // Set attending to Yes
+      vm.post.attending = true; // Set attending to true
 
       $timeout(function() {
         angular.element('html, body').stop().animate({
@@ -68,7 +68,7 @@
 
       if (vm.attending === false) {
         vm.menu = ''; // Clear menu model
-        vm.post.attending = false; // Set attending to No
+        vm.post.attending = false; // Set attending to false
         dataservice.postNotAttending(vm.post);
       }
     }
@@ -80,22 +80,14 @@
       });
     }
 
-    function postPerson(userData) {
-      dataservice.postTest(userData).then(function(response) {
-        // $timeout(function() {
-        //   postEmail(response.data);
-        //   vm.formComplete = true;
-        // }, 1000);
-        console.log(response);
-      });
-    }
+    function postPerson(userData, person) {
+      dataservice.postPerson(userData).then(function(response) {
+        vm.formComplete = true;
+        person.formCompleted = true;
+        console.log(person);
+        dataservice.updatePerson(person).then(function(r) {
 
-    function postEmail(data) {
-      console.log('postEmail func');
-      $http.post('/api/postEmail', data).success(function(d) {
-        console.log('success: ' + d);
-      }).error(function(d) {
-        console.log('error: ' + d);
+        });
       });
     }
 

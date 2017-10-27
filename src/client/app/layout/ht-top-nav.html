@@ -1,33 +1,30 @@
 <nav class="navbar navbar-default navbar-fixed-top fadeInDown" ng-class="{'navbar-shrink': vm.isScrolled}" ng-controller="NavController as vm">
+  <div class="navbar-header page-scroll">
+    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+  </div>
 
-  <div class="container-fluid">
-    <div class="navbar-header page-scroll">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-    </div>
-
-    <div class="collapse navbar-collapse" id="navbar">
-      <ul class="nav navbar-nav text-center">
-        <li>
-          <a href="/{{ vm.uniqueId }}" ng-click="vm.scrollNav('#welcome')" class="page-scroll smoothie">Welcome</a>
-        </li>
-        <li>
-          <a href="/{{ vm.uniqueId }}" ng-click="vm.scrollNav('#wedding-date')" class="page-scroll smoothie">Date</a>
-        </li>
-        <li>
-          <a href="/{{ vm.uniqueId }}" class="navbar-brand smoothie">{{ vm.couple.bride }} <img src="../images/live-heart.png"> {{ vm.couple.groom }}</a>
-        </li>
-        <li>
-          <a href="/{{ vm.uniqueId }}" ng-click="vm.scrollNav('#our-people')" class="page-scroll smoothie">Our People</a>
-        </li>
-        <li>
-          <a href="/{{ vm.uniqueId }}" ng-click="vm.scrollNav('#rsvp')" class="page-scroll smoothie">RSVP</a>
-        </li>
-      </ul>
-    </div>
+  <div class="collapse navbar-collapse" id="navbar">
+    <ul class="nav navbar-nav text-center">
+      <li>
+        <a href="/{{ vm.uniqueId }}" ng-click="vm.scrollNav('#welcome')" class="page-scroll smoothie">Welcome</a>
+      </li>
+      <li>
+        <a href="/{{ vm.uniqueId }}" ng-click="vm.scrollNav('#wedding-date')" class="page-scroll smoothie">Date</a>
+      </li>
+      <li>
+        <a href="/{{ vm.uniqueId }}" class="navbar-brand smoothie">{{ vm.couple.bride }} <img src="../images/live-heart.png"> {{ vm.couple.groom }}</a>
+      </li>
+      <li>
+        <a href="/{{ vm.uniqueId }}" ng-click="vm.scrollNav('#our-people')" class="page-scroll smoothie">Our People</a>
+      </li>
+      <li>
+        <a href="/{{ vm.uniqueId }}" ng-click="vm.scrollNav('#rsvp')" class="page-scroll smoothie">RSVP</a>
+      </li>
+    </ul>
   </div>
 </nav>

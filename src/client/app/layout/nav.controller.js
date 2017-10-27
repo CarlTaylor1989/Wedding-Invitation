@@ -28,7 +28,7 @@
     vm.couple = {'bride': 'Natalie', 'groom': 'Carl'};
     $timeout(function() {
       vm.uniqueId = $rootScope.person.id;
-    }, 1000);
+    }, 3000);
 
     vm.scrollNav = scrollNav;
 

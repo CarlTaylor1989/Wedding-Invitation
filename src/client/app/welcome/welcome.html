@@ -26,15 +26,18 @@
   </div>
 </section>
 <script>
-  $('.parallax').parallax();
+  $('.parallax').parallax({
+    overScrollFix: true,
+    positionY: '-270px'
+  });
 </script>
-<section class="light-wrapper light-opaqued parallax" data-parallax="scroll" data-image-src="https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/14224871_10154581441837642_1845308316091187860_n.jpg?oh=2276170d7d8db0b8af22c1b539d06579&oe=59F6C877" data-speed="0.7">
+<section class="light-wrapper light-opaqued parallax" data-parallax="scroll" data-image-src="https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/14224871_10154581441837642_1845308316091187860_n.jpg?oh=2276170d7d8db0b8af22c1b539d06579&oe=59F6C877" data-speed="0.4">
   <div class="section-inner">
     <div class="wow fadeIn">
       <div class="container text-center the-date">
         <div class="row">
           <div class="col-xs-12">
-            <p class="lead a-quote secondary-font">Let's write a quote here about us! :p</p>
+            <p class="lead a-quote secondary-font">We hope to see you on our wedding day!</p>
           </div>
         </div>
       </div>
@@ -71,7 +74,7 @@
                 <div class="tab-content" id="tabs-collapse">
                   <div role="tabpanel" class="tab-pane fade in active" id="when">
                     <div class="tab-inner">
-                      <p class="lead secondary-font">16th February 2018</p>
+                      <p class="lead secondary-font">16th February 2018<br />@ 2pm</p>
                     </div>
                   </div>
                   <div role="tabpanel" class="tab-pane fade" id="where">
@@ -87,7 +90,7 @@
                         <div class="col-sm-5">
                           <div id="mapwrapper">
                             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2480.145781406951!2d-0.6935206844697872!3d51.56556097964468!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487663a34cd237c1%3A0xdade077d4ce23a90!2sHedsor+House!5e0!3m2!1sen!2suk!4v1500890159885"
-                              width="463" height="220" frameborder="0" style="border:0" allowfullscreen></iframe>
+                              width="450" height="300" frameborder="0" style="border:0" allowfullscreen></iframe>
                           </div>
                         </div>
                       </div>
@@ -99,9 +102,9 @@
                         <div class="col-sm-5 col-sm-offset-1 text-left">
                           <p class="lead">Where to stay?</p>
                           <ul>
-                            <li>Hotel 1</li>
-                            <li>Hotel 2</li>
-                            <li>Hotel 3</li>
+                            <li>Chequers Inn - High Wycombe (2 miles)</li>
+                            <li>Premier Inn - High Wycombe (5.1 miles)</li>
+                            <li>Travelodge - Maidenhead (5.2 miles)</li>
                           </ul>
                         </div>
                       </div>
@@ -179,17 +182,19 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12 text-center">
-        <h4 class="footer-goodbye">Will we be seeing you on our special day?</h4>
-        <button class="btn btn-primary mt30" ng-click="vm.attendingForm(true)">Yes</button>
-        <button class="btn btn-primary mt30" ng-click="vm.attendingForm(false)">No</button>
+        <div ng-hide="vm.person.formCompleted">
+          <h4 class="footer-goodbye">Will we be seeing you on our special day?</h4>
+          <button class="btn btn-primary mt30" ng-click="vm.attendingForm(true)">Yes</button>
+          <button class="btn btn-primary mt30" ng-click="vm.attendingForm(false)">No</button>
+        </div>
       </div>
 
       <hr class="col-sm-12 thin-hr" />
 
-      <div class="col-sm-8 col-sm-offset-2 section-inner animated" id="contact" ng-if="vm.attending || vm.attending === false">
-        <div id="message"></div>
-          <form method="post" class="main-contact-form wow" ng-class="vm.formComplete ? 'fadeOut' : 'fadeIn'">
-
+      <div class="section-inner">
+        <div class="col-xs-12 col-sm-8 col-sm-offset-2 animated" id="contact" ng-if="vm.attending || vm.attending === false">
+          <div id="message"></div>
+            <form method="post" class="main-contact-form wow" ng-class="vm.formComplete ? 'fadeOut' : 'fadeIn'">
               <div ng-if="vm.attending">
                 <h3>Thank you for attending!</h3>
                 <h4>Please fill out the RSVP form below.</h4>
@@ -263,10 +268,11 @@
 
           </form>
         </div>
+      </div>
 
-        <!-- <div class="col-md-12 text-center wow fadeIn">
-          <span class="copyright">Copyright 2015. Designed by DISTINCTIVE THEMES</span>
-        </div> -->
+      <div class="col-md-12 text-center wow fadeIn">
+        <span class="copyright">Copyright 2017. Designed &amp; developed by Carl Taylor</span>
+      </div>
     </div>
   </div>
 </footer>
