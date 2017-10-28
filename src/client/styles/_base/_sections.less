@@ -16,6 +16,7 @@ section {
       position: relative;
       border: none;
       text-align: center;
+      overflow: visible;
       &:after {
         content: '';
         position: absolute;
@@ -23,7 +24,7 @@ section {
         height: 2px;
         background-color: #333;
         left: 50%;
-        margin-left: -80px;
+        transform: translateX(-50%);
       }
       &:before {
         font-family: 'FontAwesome';
@@ -31,7 +32,7 @@ section {
         color: #C10E1F;
         position: absolute;
         width: 180px;
-        margin-left: -80px;
+        transform: translateX(-50%);
         margin-top: -10px;
         z-index: 5;
       }

@@ -178,108 +178,100 @@
   </div>
 </section>
 
-<footer id="rsvp" class="white-wrapper">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12 text-center">
-        <div ng-hide="vm.person.formCompleted">
-          <h4 class="footer-goodbye">Will we be seeing you on our special day?</h4>
-          <button class="btn btn-primary mt30" ng-click="vm.attendingForm(true)">Yes</button>
-          <button class="btn btn-primary mt30" ng-click="vm.attendingForm(false)">No</button>
+<section id="rsvp" class="white-wrapper">
+  <div class="section-inner">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <div ng-hide="vm.person.formCompleted">
+            <h4 class="footer-goodbye">Will we be seeing you on our special day?</h4>
+            <button class="btn btn-primary mt30" ng-click="vm.attendingForm(true)">Yes</button>
+            <button class="btn btn-primary mt30" ng-click="vm.attendingForm(false)">No</button>
+          </div>
+          <hr class="thin-hr" />
         </div>
-      </div>
-
-      <hr class="col-sm-12 thin-hr" />
-
-      <div class="section-inner">
         <div class="col-xs-12 col-sm-8 col-sm-offset-2 animated" id="contact" ng-if="vm.attending || vm.attending === false">
           <div id="message"></div>
-            <form method="post" class="main-contact-form wow" ng-class="vm.formComplete ? 'fadeOut' : 'fadeIn'">
-              <div ng-if="vm.attending">
-                <h3>Thank you for attending!</h3>
-                <h4>Please fill out the RSVP form below.</h4>
-              </div>
+          <form method="post" class="main-contact-form wow" ng-class="vm.formComplete ? 'fadeOut' : 'fadeIn'">
+            <div ng-if="vm.attending">
+              <h3>Thank you for attending!</h3>
+              <h4>Please fill out the RSVP form below.</h4>
+            </div>
 
-              <div ng-if="vm.attending === false">
-                <h3>We're sad that you cannot make it.</h3>
-                <h4>Please leave us a message if you like.</h4>
-              </div>
+            <div ng-if="vm.attending === false">
+              <h3>We're sad that you cannot make it.</h3>
+              <h4>Please leave us a message if you like.</h4>
+            </div>
 
-              <br /><br /><br />
+            <br /><br /><br />
 
-              <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" class="form-control" name="name" id="name" ng-value="vm.person.name" value="{{ vm.person.name }}" ng-model="vm.post.name" />
-              </div>
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" class="form-control" name="name" id="name" ng-value="vm.person.name" value="{{ vm.person.name }}" ng-model="vm.post.name" />
+            </div>
 
-              <div class="form-group has-error" ng-show="vm.validationMsg.menu">
-                <label class="control-label">Please select a menu choice</label>
-              </div>
+            <div class="form-group has-error" ng-show="vm.validationMsg.menu">
+              <label class="control-label">Please select a menu choice</label>
+            </div>
 
-              <div class="form-group" ng-hide="!vm.check" style="float: left;" ng-if="vm.person.collective && vm.attending" ng-repeat="per in vm.person.selective track by $index">
-                <label for="name">Meal preferences for {{ per.name }}</label>
-                <div class="funkyradio">
-                  <div class="funkyradio-default">
-                    <input type="radio" name="{{per.name}}-menu" id="{{per.name}}-menu-lamb" value="{{per.name}} - Lamb" ng-model="vm.post.menu[$index]" ng-click="vm.validationMsg.menu = false;" />
-                    <label for="{{per.name}}-menu-lamb">Lamb</label>
-                  </div>
-                  <div class="funkyradio-default">
-                    <input type="radio" name="{{per.name}}-menu" id="{{per.name}}-menu-fish" value="{{per.name}} - Fish" ng-model="vm.post.menu[$index]" />
-                    <label for="{{per.name}}-menu-fish">Fish</label>
-                  </div>
-                  <div class="funkyradio-default">
-                    <input type="radio" name="{{per.name}}-menu" id="{{per.name}}-menu-vegetarian" value="{{per.name}} - Vegetarian" ng-model="vm.post.menu[$index]" />
-                    <label for="{{per.name}}-menu-vegetarian">Vegetarian</label>
-                  </div>
+            <div class="form-group" ng-hide="!vm.check" style="float: left;" ng-if="vm.person.collective && vm.attending" ng-repeat="per in vm.person.selective track by $index">
+              <label for="name">Meal preferences for {{ per.name }}</label>
+              <div class="funkyradio">
+                <div class="funkyradio-default">
+                  <input type="radio" name="{{per.name}}-menu" id="{{per.name}}-menu-lamb" value="{{per.name}} - Lamb" ng-model="vm.post.menu[$index]" ng-click="vm.validationMsg.menu = false;" />
+                  <label for="{{per.name}}-menu-lamb">Lamb</label>
+                </div>
+                <div class="funkyradio-default">
+                  <input type="radio" name="{{per.name}}-menu" id="{{per.name}}-menu-fish" value="{{per.name}} - Fish" ng-model="vm.post.menu[$index]" />
+                  <label for="{{per.name}}-menu-fish">Fish</label>
+                </div>
+                <div class="funkyradio-default">
+                  <input type="radio" name="{{per.name}}-menu" id="{{per.name}}-menu-vegetarian" value="{{per.name}} - Vegetarian" ng-model="vm.post.menu[$index]" />
+                  <label for="{{per.name}}-menu-vegetarian">Vegetarian</label>
                 </div>
               </div>
+            </div>
 
-              <div class="form-group" ng-hide="!vm.check" style="float: left;" ng-if="!vm.person.collective && vm.attending">
-                <label for="name">Meal preferences</label>
-                <div class="funkyradio">
-                  <div class="funkyradio-default">
-                    <input type="radio" name="{{vm.person.name}}-menu" id="{{vm.person.name}}-menu-lamb" value="{{vm.person.name}} - Lamb" ng-model="vm.post.menu" />
-                    <label for="{{vm.person.name}}-menu-lamb">Lamb</label>
-                  </div>
-                  <div class="funkyradio-default">
-                    <input type="radio" name="{{vm.person.name}}-menu" id="{{vm.person.name}}-menu-fish" value="{{vm.person.name}} - Fish" ng-model="vm.post.menu" />
-                    <label for="{{vm.person.name}}-menu-fish">Fish</label>
-                  </div>
-                  <div class="funkyradio-default">
-                    <input type="radio" name="{{vm.person.name}}-menu" id="{{vm.person.name}}-menu-vegetarian" value="{{vm.person.name}} - Vegetarian" ng-model="vm.post.menu" />
-                    <label for="{{vm.person.name}}-menu-vegetarian">Vegetarian</label>
-                  </div>
+            <div class="form-group" ng-hide="!vm.check" style="float: left;" ng-if="!vm.person.collective && vm.attending">
+              <label for="name">Meal preferences</label>
+              <div class="funkyradio">
+                <div class="funkyradio-default">
+                  <input type="radio" name="{{vm.person.name}}-menu" id="{{vm.person.name}}-menu-lamb" value="{{vm.person.name}} - Lamb" ng-model="vm.post.menu" />
+                  <label for="{{vm.person.name}}-menu-lamb">Lamb</label>
+                </div>
+                <div class="funkyradio-default">
+                  <input type="radio" name="{{vm.person.name}}-menu" id="{{vm.person.name}}-menu-fish" value="{{vm.person.name}} - Fish" ng-model="vm.post.menu" />
+                  <label for="{{vm.person.name}}-menu-fish">Fish</label>
+                </div>
+                <div class="funkyradio-default">
+                  <input type="radio" name="{{vm.person.name}}-menu" id="{{vm.person.name}}-menu-vegetarian" value="{{vm.person.name}} - Vegetarian" ng-model="vm.post.menu" />
+                  <label for="{{vm.person.name}}-menu-vegetarian">Vegetarian</label>
                 </div>
               </div>
+            </div>
 
-              <div class="form-group" style="float: left; clear: both; width: 100%;" ng-if="vm.attending">
-                <label for="">Dietary requirements</label>
-                <input type="text" class="form-control" name="diet" placeholder="Dietary requirements" id="diet" ng-model="vm.post.diet" value="{{ vm.post.diet }}" />
-              </div>
+            <div class="form-group" style="float: left; clear: both; width: 100%;" ng-if="vm.attending">
+              <label for="">Dietary requirements</label>
+              <input type="text" class="form-control" name="diet" placeholder="Dietary requirements" id="diet" ng-model="vm.post.diet" value="{{ vm.post.diet }}" />
+            </div>
 
-              <div class="form-group" style="clear: both;">
-                <label for="comments">Leave us a message</label>
-                <textarea ng-if="vm.attending || vm.attending === false" name="comments" class="form-control wow fadeIn" id="comments" placeholder="Your Message *" required data-validation-required-message="Please enter a message." ng-model="vm.post.message"></textarea>
-              </div>
+            <div class="form-group" style="clear: both;">
+              <label for="comments">Leave us a message</label>
+              <textarea ng-if="vm.attending || vm.attending === false" name="comments" class="form-control wow fadeIn" id="comments" placeholder="Your Message *" required data-validation-required-message="Please enter a message." ng-model="vm.post.message"></textarea>
+            </div>
 
-              <div class="form-group">
-                <input ng-if="vm.attending || vm.attending === false" class="btn btn-primary mt30" type="submit" name="submit" value="Submit" ng-click="vm.formAuth(vm.post)" />
-              </div>
-
+            <div class="form-group">
+              <input ng-if="vm.attending || vm.attending === false" class="btn btn-primary mt30" type="submit" name="submit" value="Submit" ng-click="vm.formAuth(vm.post)" />
+            </div>
           </form>
         </div>
       </div>
-
-      <div class="col-md-12 text-center wow fadeIn">
-        <span class="copyright">Copyright 2017. Designed &amp; developed by Carl Taylor</span>
-      </div>
     </div>
   </div>
-</footer>
+</section>
 
-<!--
-freya
-jaely
-sarah
-ale
--->
+<footer class="light-wrapper">
+  <div class="col-md-12 text-center wow fadeIn">
+    <span class="copyright">Copyright &copy; 2017. Designed &amp; developed by Carl Taylor</span>
+  </div>
+</footer>
