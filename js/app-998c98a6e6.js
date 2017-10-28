@@ -490,78 +490,63 @@
   /* @ngInject */
   function dataservice($http, $q, exception, logger) {
 
-    var API = 'https://api.mlab.com/api/1/databases/';
-    var KEY = '?apiKey=uOw09VD_O3zuzZMHw4Bb04gYgDPk44tK';
-    var USERS = 'invitations/collections/accepted';
-
+    var ATTEND_ENDPOINT = 'https://api.mlab.com/api/1/databases/invitations/collections/accepted';
     var PEOPLE_ENDPOINT = 'https://api.mlab.com/api/1/databases/invitations/collections/people';
+    var KEY = '?apiKey=uOw09VD_O3zuzZMHw4Bb04gYgDPk44tK';
 
     var service = {
-      getPeople: getPeople,
-      getPerson: getPerson,
-      getPersonTest: getPersonTest,
       getMessageCount: getMessageCount,
-      postTest: postTest,
-      postUser: postUser,
-      postNotAttending: postNotAttending
+      getPerson: getPerson,
+      postPerson: postPerson,
+      postNotAttending: postNotAttending,
+      updatePerson: updatePerson
     };
 
     return service;
 
     function getMessageCount() { return $q.when(72); }
 
-    function getPeople() {
-      console.log('here?')
-      return $http.get('/api/people')
-        .then(success)
-        .catch(fail);
-
-      function success(response) {
-        return response.data;
-      }
-
-      function fail(e) {
-        return exception.catcher('XHR Failed for getPeople')(e);
-      }
-    }
-
     function getPerson(id) {
       return $http({
         url: PEOPLE_ENDPOINT + '?q={id:'+ id +'}&apiKey=uOw09VD_O3zuzZMHw4Bb04gYgDPk44tK',
         method: 'GET'
       }).then(function(response) {
+        console.log(response.data[0]);
         return response.data[0];
       }, function(response) {
-        return exception.catcher('XHR Failed for postTest')(response);
+        return exception.catcher('XHR Failed for getPerson')(response);
       });
     }
 
-    function getPersonTest(id) {
+    function postPerson(data) {
       return $http({
-        url: PEOPLE_ENDPOINT + '?q={id:'+ id +'}&apiKey=uOw09VD_O3zuzZMHw4Bb04gYgDPk44tK',
-        method: 'GET'
-      }).then(function(response) {
-        return response.data[0];
-      }, function(response) {
-        return exception.catcher('XHR Failed for postTest')(response);
-      });
-    }
-
-    function postTest(data) {
-      return $http({
-        url: API + USERS + KEY,
+        url: ATTEND_ENDPOINT + KEY,
         method: 'POST',
         data: data
       }).then(function(response) {
         return response;
       }, function(response) {
-        return exception.catcher('XHR Failed for postTest')(response);
+        return exception.catcher('XHR Failed for postPerson')(response);
+      });
+    }
+
+    function updatePerson(data) {
+      return $http({
+        url: PEOPLE_ENDPOINT + '?q={id:'+ data.id +'}&apiKey=uOw09VD_O3zuzZMHw4Bb04gYgDPk44tK',
+        method: 'PUT',
+        data: data
+      }).then(function(response) {
+        console.log('success', response);
+        return response;
+      }, function(response) {
+        console.log('fail', response);
+        return exception.catcher('XHR Failed for updatePerson')(response);
       });
     }
 
     function postNotAttending(data) {
       return $http({
-        url: API + USERS + KEY,
+        url: ATTEND_ENDPOINT + KEY,
         method: 'POST',
         data: data
       }).then(function(response) {
@@ -569,20 +554,6 @@
       }, function(response) {
         return exception.catcher('XHR Failed for postNotAttending')(response);
       });
-    }
-
-    function postUser() {
-      return $http.post('/api/users')
-        .then(success)
-        .catch(fail);
-
-      function success(r) {
-        return r.data;
-      }
-
-      function fail(e) {
-        return exception.catcher('XHR Failed for postUser')(e);
-      }
     }
 
   }
@@ -766,7 +737,7 @@
     vm.couple = {'bride': 'Natalie', 'groom': 'Carl'};
     $timeout(function() {
       vm.uniqueId = $rootScope.person.id;
-    }, 1000);
+    }, 3000);
 
     vm.scrollNav = scrollNav;
 
@@ -938,13 +909,13 @@
         vm.validationMsg.menu = true;
         return false;
       } else {
-        postPerson(vm.post);
+        postPerson(vm.post, vm.person);
       }
     }
 
     function attendingForm(bool) {
       vm.attending = bool;
-      vm.post.attending = true; // Set attending to Yes
+      vm.post.attending = true; // Set attending to true
 
       $timeout(function() {
         angular.element('html, body').stop().animate({
@@ -956,7 +927,7 @@
 
       if (vm.attending === false) {
         vm.menu = ''; // Clear menu model
-        vm.post.attending = false; // Set attending to No
+        vm.post.attending = false; // Set attending to false
         dataservice.postNotAttending(vm.post);
       }
     }
@@ -968,22 +939,14 @@
       });
     }
 
-    function postPerson(userData) {
-      dataservice.postTest(userData).then(function(response) {
-        // $timeout(function() {
-        //   postEmail(response.data);
-        //   vm.formComplete = true;
-        // }, 1000);
-        console.log(response);
-      });
-    }
+    function postPerson(userData, person) {
+      dataservice.postPerson(userData).then(function(response) {
+        vm.formComplete = true;
+        person.formCompleted = true;
+        console.log(person);
+        dataservice.updatePerson(person).then(function(r) {
 
-    function postEmail(data) {
-      console.log('postEmail func');
-      $http.post('/api/postEmail', data).success(function(d) {
-        console.log('success: ' + d);
-      }).error(function(d) {
-        console.log('error: ' + d);
+        });
       });
     }
 
@@ -1111,11 +1074,11 @@
 })();
 
 angular.module("app.core").run(["$templateCache", function($templateCache) {$templateCache.put("app/admin/admin.html","<section class=mainbar><section class=matter><div class=container><div class=row><div class=\"widget wviolet\"><div ht-widget-header title={{vm.title}}></div><div class=\"widget-content user\"><h3>TODO: Implement Your Features</h3></div><div class=widget-foot><div class=clearfix></div></div></div></div></div></section></section>");
-$templateCache.put("app/core/404.html","<section id=dashboard-view class=mainbar><section class=matter><div class=container><div class=row><div class=col-md-12><ul class=today-datas><li class=bred><div class=pull-left><i class=\"fa fa-warning\"></i></div><div class=\"datas-text pull-right\"><a><span class=bold>404</span></a>Page Not Found</div><div class=clearfix></div></li></ul></div></div><div class=row><div class=\"widget wblue\"><div ht-widget-header title=\"Page Not Found\" allow-collapse=true></div><div class=\"widget-content text-center text-info\"><div class=container>No soup for you!</div></div><div class=widget-foot><div class=clearfix></div></div></div></div></div></section></section>");
 $templateCache.put("app/date/date.html","<section id=welcome><div class=section-inner><div class=container><div class=row><div class=\"col-lg-12 text-center mb100 wow fadeIn\"><h2 class=section-heading>Natalie and Carl</h2><hr class=thin-hr><h3 class=\"section-subheading secondary-font\">Join us on our special occasion.</h3></div></div></div></div></section>");
 $templateCache.put("app/layout/header.html","<header id=headerwrap class=\"backstretched fullheight\" style=\"position: relative; z-index: 0; background: none; height: 676px;\"><div class=\"container vertical-center\" style=\"padding-top: 152px;\"><div class=\"intro-text vertical-center text-center smoothie\" style=\"padding-top: 110px;\"><div class=\"intro-heading wow fadeIn heading-font\"><span class=secondary-font>Celebrating</span>Natalie and Carl</div></div></div><div class=backstretch style=\"left: 0px; top: 0px; overflow: hidden; margin: 0px; padding: 0px; z-index: -999998; position: absolute; width: 100%; height: 676px;\"><div class=\"carousel slide\" data-ride=carousel><ol class=carousel-indicators><li data-target=#carousel-example-generic data-slide-to=0 class=active></li></ol><div class=carousel-inner role=listbox><div class=\"item active\"><img src=../images/us.jpg alt=\"This is us!\"><div class=carousel-caption></div></div></div></div></div></header>");
-$templateCache.put("app/layout/ht-top-nav.html","<nav class=\"navbar navbar-default navbar-fixed-top fadeInDown\" ng-class=\"{\'navbar-shrink\': vm.isScrolled}\" ng-controller=\"NavController as vm\"><div class=container-fluid><div class=\"navbar-header page-scroll\"><button type=button class=\"navbar-toggle collapsed\" data-toggle=collapse data-target=#navbar aria-expanded=false><span class=sr-only>Toggle navigation</span> <span class=icon-bar></span> <span class=icon-bar></span> <span class=icon-bar></span></button></div><div class=\"collapse navbar-collapse\" id=navbar><ul class=\"nav navbar-nav text-center\"><li><a href=\"/{{ vm.uniqueId }}\" ng-click=\"vm.scrollNav(\'#welcome\')\" class=\"page-scroll smoothie\">Welcome</a></li><li><a href=\"/{{ vm.uniqueId }}\" ng-click=\"vm.scrollNav(\'#wedding-date\')\" class=\"page-scroll smoothie\">Date</a></li><li><a href=\"/{{ vm.uniqueId }}\" class=\"navbar-brand smoothie\">{{ vm.couple.bride }} <img src=../images/live-heart.png> {{ vm.couple.groom }}</a></li><li><a href=\"/{{ vm.uniqueId }}\" ng-click=\"vm.scrollNav(\'#our-people\')\" class=\"page-scroll smoothie\">Our People</a></li><li><a href=\"/{{ vm.uniqueId }}\" ng-click=\"vm.scrollNav(\'#rsvp\')\" class=\"page-scroll smoothie\">RSVP</a></li></ul></div></div></nav>");
+$templateCache.put("app/layout/ht-top-nav.html","<nav class=\"navbar navbar-default navbar-fixed-top fadeInDown\" ng-class=\"{\'navbar-shrink\': vm.isScrolled}\" ng-controller=\"NavController as vm\"><div class=\"navbar-header page-scroll\"><button type=button class=\"navbar-toggle collapsed\" data-toggle=collapse data-target=#navbar aria-expanded=false><span class=sr-only>Toggle navigation</span> <span class=icon-bar></span> <span class=icon-bar></span> <span class=icon-bar></span></button></div><div class=\"collapse navbar-collapse\" id=navbar><ul class=\"nav navbar-nav text-center\"><li><a href=\"/{{ vm.uniqueId }}\" ng-click=\"vm.scrollNav(\'#welcome\')\" class=\"page-scroll smoothie\">Welcome</a></li><li><a href=\"/{{ vm.uniqueId }}\" ng-click=\"vm.scrollNav(\'#wedding-date\')\" class=\"page-scroll smoothie\">Date</a></li><li><a href=\"/{{ vm.uniqueId }}\" class=\"navbar-brand smoothie\">{{ vm.couple.bride }} <img src=../images/live-heart.png> {{ vm.couple.groom }}</a></li><li><a href=\"/{{ vm.uniqueId }}\" ng-click=\"vm.scrollNav(\'#our-people\')\" class=\"page-scroll smoothie\">Our People</a></li><li><a href=\"/{{ vm.uniqueId }}\" ng-click=\"vm.scrollNav(\'#rsvp\')\" class=\"page-scroll smoothie\">RSVP</a></li></ul></div></nav>");
 $templateCache.put("app/layout/shell.html","<div ng-controller=\"ShellController as vm\"><div class=clearfix><ht-top-nav navline=vm.navline></ht-top-nav></div><div ng-include=\"\'app/layout/header.html\'\"></div><div ui-view class=shuffle-animation></div><div ngplus-overlay ngplus-overlay-delay-in=50 ngplus-overlay-delay-out=700 ngplus-overlay-animation=dissolve-animation><img src=images/busy.gif><div class=\"page-spinner-message overlay-message\">{{vm.busyMessage}}</div></div></div>");
 $templateCache.put("app/layout/sidebar.html","<div ng-controller=\"SidebarController as vm\"><ht-sidebar when-done-animating=vm.sidebarReady()><div class=sidebar-filler></div><div class=sidebar-dropdown><a href=#>Menu</a></div><div class=sidebar-inner><div class=sidebar-widget></div><ul class=navi><li class=\"nlightblue fade-selection-animation\" ng-class=vm.isCurrent(r) ng-repeat=\"r in vm.navRoutes\"><a ui-sref={{r.name}} ng-bind-html=r.settings.content></a></li></ul></div></ht-sidebar></div>");
-$templateCache.put("app/welcome/welcome.html","<section id=welcome><div class=section-inner><div class=container><div class=row><div class=\"col-lg-12 text-center mb100\"><h2 class=section-heading ng-if=vm.person.name>Hi {{vm.person.name}}</h2><hr class=thin-hr><h3 class=\"section-subheading secondary-font\">Join us on our special occasion.</h3></div></div></div><div class=container><div class=row><div class=\"col-md-5 col-md-offset-1 wow fadeIn\"><img src=\"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/17190906_10158357508400224_927789344308959818_n.jpg?oh=8a317f5268fd41299174c7c45601b6a7&oe=5A06818C\" class=\"img-responsive mb30\"><p class=text-center>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.</p></div><div class=\"col-md-5 wow fadeIn\"><img src=\"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/20257927_10155668154587642_6519342810189991287_n.jpg?oh=ff1e3d294316e44a5d9fb558be0dce9a&oe=59F25D41\" class=\"img-responsive mb30\"><p class=text-center>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.</p></div></div></div></div></section><script>\n  $(\'.parallax\').parallax();\n</script><section class=\"light-wrapper light-opaqued parallax\" data-parallax=scroll data-image-src=\"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/14224871_10154581441837642_1845308316091187860_n.jpg?oh=2276170d7d8db0b8af22c1b539d06579&oe=59F6C877\" data-speed=0.7><div class=section-inner><div class=\"wow fadeIn\"><div class=\"container text-center the-date\"><div class=row><div class=col-xs-12><p class=\"lead a-quote secondary-font\">Let\'s write a quote here about us! :p</p></div></div></div></div></div></section><section id=wedding-date class=light-wrapper><div class=section-inner><div class=\"wow fadeIn\"><div class=\"container text-center\"><div class=row><div class=col-xs-12 role=tabpanel><div class=row><div class=\"col-xs-4 col-sm-12\"><ul class=\"nav nav-justified icon-tabs\" id=nav-tabs role=tablist><li role=presentation class=active><a href=#when role=tab data-toggle=tab><span class=\"tabtitle heading-font\">The Date</span></a></li><li role=presentation><a href=#where role=tab data-toggle=tab><span class=\"tabtitle heading-font\">The Location</span></a></li><li role=presentation><a href=#stay role=tab data-toggle=tab><span class=\"tabtitle heading-font\">Where to stay?</span></a></li></ul></div><div class=\"col-xs-8 col-sm-12 mt60\"><div class=tab-content id=tabs-collapse><div role=tabpanel class=\"tab-pane fade in active\" id=when><div class=tab-inner><p class=\"lead secondary-font\">16th February 2018</p></div></div><div role=tabpanel class=\"tab-pane fade\" id=where><div class=tab-inner><div class=row><div class=\"col-sm-5 col-sm-offset-1 text-left\"><p class=lead>Hedsor House</p><p>Hedsor Park</p><p>Taplow</p><p>Buckinghamshire</p><p>SL6 0HX</p></div><div class=col-sm-5><div id=mapwrapper><iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2480.145781406951!2d-0.6935206844697872!3d51.56556097964468!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487663a34cd237c1%3A0xdade077d4ce23a90!2sHedsor+House!5e0!3m2!1sen!2suk!4v1500890159885\" width=463 height=220 frameborder=0 style=border:0 allowfullscreen></iframe></div></div></div></div></div><div role=tabpanel class=\"tab-pane fade\" id=stay><div class=tab-inner><div class=row><div class=\"col-sm-5 col-sm-offset-1 text-left\"><p class=lead>Where to stay?</p><ul><li>Hotel 1</li><li>Hotel 2</li><li>Hotel 3</li></ul></div></div></div></div></div></div></div></div></div></div></div></div></section><section id=our-people class=light-wrapper><div class=section-inner><div class=\"wow fadeIn\"><div class=container><div class=row><div class=col-xs-12><h2 class=section-heading>Meet the Groomsmen<h2></h2></h2></div></div><div class=row style=\"margin-bottom: 40px;\"><div class=col-sm-5ths><img src=\"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/15940510_10158020981320542_3271052378048383733_n.jpg?oh=a7fee78d09b8ac05242b0ab907b05fa9&oe=5A0092A2\" alt=\"Adam Roylance\" class=\"img-responsive grayscale\"><h3 class=\"section-subheading secondary-font\"><i class=\"fa fa-male\" aria-hidden=true></i> Adam Roylance</h3></div><div class=col-sm-5ths><img src=\"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-0/p206x206/18519900_10155365920714243_6223846216862283914_n.jpg?oh=8944c1f19a5739cb21e65c7867296c15&oe=59FF50C2\" alt=\"Jenson Tagg\" class=\"img-responsive grayscale\"><h3 class=\"section-subheading secondary-font\">Jenson Tagg</h3></div><div class=col-sm-5ths><img src=\"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/1469828_10152099263884316_951495177_n.jpg?oh=8735de403a14479fb53ab7a4bba94b4d&oe=5A0CA473\" alt=\"Toby Barr\" class=\"img-responsive grayscale\"><h3 class=\"section-subheading secondary-font\">Toby Barr</h3></div><div class=col-sm-5ths><img src=\"https://scontent-lht6-1.xx.fbcdn.net/v/t31.0-8/17632014_10158282324150417_2831114810542218688_o.jpg?oh=a9ab33ccf51fd2e53165be2f2aa441e9&oe=59F0560D\" alt=\"Reece Tocker\" class=\"img-responsive grayscale\"><h3 class=\"section-subheading secondary-font\">Reece Tocker</h3></div><div class=col-sm-5ths><img src=\"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/13528729_10209711859297751_5897795310314393633_n.jpg?oh=8a0563b8b9ead8a1e3135726b0ce122c&oe=59FB477C\" alt=\"Dan Hennessy\" class=\"img-responsive grayscale\"><h3 class=\"section-subheading secondary-font\">Dan Hennessy</h3></div></div><div class=row><div class=col-xs-12><h2 class=section-heading>Meet the Bridesmaids<h2></h2></h2></div></div><div class=row><div class=col-sm-3><img src=\"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/843_10151257651277155_1030737319_n.jpg?oh=131bf1b5fead92c5eaf2d3e4a754e9f6&oe=59ECAED1\" alt=\"Freya Brook\" class=\"img-responsive grayscale\"><h3 class=\"section-subheading secondary-font\"><i class=\"fa fa-female\" aria-hidden=true></i> Freya Brook</h3></div><div class=col-sm-3><img src=\"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/12279066_10153625965766006_5962740131971583631_n.jpg?oh=40ac9a39531e91dba58e838eec1a463f&oe=59FAB94F\" alt=\"Jaely Collier\" class=\"img-responsive grayscale\"><h3 class=\"section-subheading secondary-font\">Jaely Collier</h3></div><div class=col-sm-3><img src=\"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/16998950_10154493411137309_8674191618146175489_n.jpg?oh=d40b620f5dac032f16c714edafc0b69e&oe=5A3751E1\" alt=\"Sarah McDowall\" class=\"img-responsive grayscale\"><h3 class=\"section-subheading secondary-font\">Sarah McDowall</h3></div><div class=col-sm-3><img src=\"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/10404320_10155786195150573_6464601391871969077_n.jpg?oh=e2abf67b3d115b739d451ec487e7e705&oe=5A026B4C\" alt=\"Alejandra Paixão\" class=\"img-responsive grayscale\"><h3 class=\"section-subheading secondary-font\">Alejandra Paixão</h3></div></div></div></div></div></section><footer id=rsvp class=white-wrapper><div class=container><div class=row><div class=\"col-md-12 text-center\"><h4 class=footer-goodbye>Will we be seeing you on our special day?</h4><button class=\"btn btn-primary mt30\" ng-click=vm.attendingForm(true)>Yes</button> <button class=\"btn btn-primary mt30\" ng-click=vm.attendingForm(false)>No</button></div><hr class=\"col-sm-12 thin-hr\"><div class=\"col-sm-8 col-sm-offset-2 section-inner animated\" id=contact ng-if=\"vm.attending || vm.attending === false\"><div id=message></div><form method=post class=\"main-contact-form wow\" ng-class=\"vm.formComplete ? \'fadeOut\' : \'fadeIn\'\"><div ng-if=vm.attending><h3>Thank you for attending!</h3><h4>Please fill out the RSVP form below.</h4></div><div ng-if=\"vm.attending === false\"><h3>We\'re sad that you cannot make it.</h3><h4>Please leave us a message if you like.</h4></div><br><br><br><div class=form-group><label for=name>Name</label> <input type=text class=form-control name=name id=name ng-value=vm.person.name value=\"{{ vm.person.name }}\" ng-model=vm.post.name></div><div class=\"form-group has-error\" ng-show=vm.validationMsg.menu><label class=control-label>Please select a menu choice</label></div><div class=form-group ng-hide=!vm.check style=\"float: left;\" ng-if=\"vm.person.collective && vm.attending\" ng-repeat=\"per in vm.person.selective track by $index\"><label for=name>Meal preferences for {{ per.name }}</label><div class=funkyradio><div class=funkyradio-default><input type=radio name={{per.name}}-menu id={{per.name}}-menu-lamb value=\"{{per.name}} - Lamb\" ng-model=vm.post.menu[$index] ng-click=\"vm.validationMsg.menu = false;\"> <label for={{per.name}}-menu-lamb>Lamb</label></div><div class=funkyradio-default><input type=radio name={{per.name}}-menu id={{per.name}}-menu-fish value=\"{{per.name}} - Fish\" ng-model=vm.post.menu[$index]> <label for={{per.name}}-menu-fish>Fish</label></div><div class=funkyradio-default><input type=radio name={{per.name}}-menu id={{per.name}}-menu-vegetarian value=\"{{per.name}} - Vegetarian\" ng-model=vm.post.menu[$index]> <label for={{per.name}}-menu-vegetarian>Vegetarian</label></div></div></div><div class=form-group ng-hide=!vm.check style=\"float: left;\" ng-if=\"!vm.person.collective && vm.attending\"><label for=name>Meal preferences</label><div class=funkyradio><div class=funkyradio-default><input type=radio name={{vm.person.name}}-menu id={{vm.person.name}}-menu-lamb value=\"{{vm.person.name}} - Lamb\" ng-model=vm.post.menu> <label for={{vm.person.name}}-menu-lamb>Lamb</label></div><div class=funkyradio-default><input type=radio name={{vm.person.name}}-menu id={{vm.person.name}}-menu-fish value=\"{{vm.person.name}} - Fish\" ng-model=vm.post.menu> <label for={{vm.person.name}}-menu-fish>Fish</label></div><div class=funkyradio-default><input type=radio name={{vm.person.name}}-menu id={{vm.person.name}}-menu-vegetarian value=\"{{vm.person.name}} - Vegetarian\" ng-model=vm.post.menu> <label for={{vm.person.name}}-menu-vegetarian>Vegetarian</label></div></div></div><div class=form-group style=\"float: left; clear: both; width: 100%;\" ng-if=vm.attending><label for>Dietary requirements</label> <input type=text class=form-control name=diet placeholder=\"Dietary requirements\" id=diet ng-model=vm.post.diet value=\"{{ vm.post.diet }}\"></div><div class=form-group style=\"clear: both;\"><label for=comments>Leave us a message</label> <textarea ng-if=\"vm.attending || vm.attending === false\" name=comments class=\"form-control wow fadeIn\" id=comments placeholder=\"Your Message *\" required data-validation-required-message=\"Please enter a message.\" ng-model=vm.post.message></textarea></div><div class=form-group><input ng-if=\"vm.attending || vm.attending === false\" class=\"btn btn-primary mt30\" type=submit name=submit value=Submit ng-click=vm.formAuth(vm.post)></div></form></div></div></div></footer>");
+$templateCache.put("app/core/404.html","<section id=dashboard-view class=mainbar><section class=matter><div class=container><div class=row><div class=col-md-12><ul class=today-datas><li class=bred><div class=pull-left><i class=\"fa fa-warning\"></i></div><div class=\"datas-text pull-right\"><a><span class=bold>404</span></a>Page Not Found</div><div class=clearfix></div></li></ul></div></div><div class=row><div class=\"widget wblue\"><div ht-widget-header title=\"Page Not Found\" allow-collapse=true></div><div class=\"widget-content text-center text-info\"><div class=container>No soup for you!</div></div><div class=widget-foot><div class=clearfix></div></div></div></div></div></section></section>");
+$templateCache.put("app/welcome/welcome.html","<section id=welcome><div class=section-inner><div class=container><div class=row><div class=\"col-lg-12 text-center mb100\"><h2 class=section-heading ng-if=vm.person.name>Hi {{vm.person.name}}</h2><hr class=thin-hr><h3 class=\"section-subheading secondary-font\">Join us on our special occasion.</h3></div></div></div><div class=container><div class=row><div class=\"col-md-5 col-md-offset-1 wow fadeIn\"><img src=\"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/17190906_10158357508400224_927789344308959818_n.jpg?oh=8a317f5268fd41299174c7c45601b6a7&oe=5A06818C\" class=\"img-responsive mb30\"><p class=text-center>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.</p></div><div class=\"col-md-5 wow fadeIn\"><img src=\"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/20257927_10155668154587642_6519342810189991287_n.jpg?oh=ff1e3d294316e44a5d9fb558be0dce9a&oe=59F25D41\" class=\"img-responsive mb30\"><p class=text-center>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.</p></div></div></div></div></section><script>\n  $(\'.parallax\').parallax({\n    overScrollFix: true,\n    positionY: \'-270px\'\n  });\n</script><section class=\"light-wrapper light-opaqued parallax\" data-parallax=scroll data-image-src=\"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/14224871_10154581441837642_1845308316091187860_n.jpg?oh=2276170d7d8db0b8af22c1b539d06579&oe=59F6C877\" data-speed=0.4><div class=section-inner><div class=\"wow fadeIn\"><div class=\"container text-center the-date\"><div class=row><div class=col-xs-12><p class=\"lead a-quote secondary-font mb0\">We hope to see you on our wedding day!</p></div></div></div></div></div></section><section id=wedding-date class=light-wrapper><div class=section-inner><div class=\"wow fadeIn\"><div class=\"container text-center\"><div class=row><div class=col-xs-12 role=tabpanel><div class=row><div class=\"col-xs-4 col-sm-12\"><ul class=\"nav nav-justified icon-tabs\" id=nav-tabs role=tablist><li role=presentation class=active><a href=#when role=tab data-toggle=tab><span class=\"tabtitle heading-font\">The Date</span></a></li><li role=presentation><a href=#where role=tab data-toggle=tab><span class=\"tabtitle heading-font\">The Location</span></a></li><li role=presentation><a href=#stay role=tab data-toggle=tab><span class=\"tabtitle heading-font\">Where to stay?</span></a></li></ul></div><div class=\"col-xs-8 col-sm-12 mt60\"><div class=tab-content id=tabs-collapse><div role=tabpanel class=\"tab-pane fade in active\" id=when><div class=tab-inner><p class=\"lead secondary-font\">16th February 2018<br>@ 2pm</p></div></div><div role=tabpanel class=\"tab-pane fade\" id=where><div class=tab-inner><div class=row><div class=\"col-sm-5 col-sm-offset-1 text-left\"><p class=lead>Hedsor House</p><p>Hedsor Park</p><p>Taplow</p><p>Buckinghamshire</p><p>SL6 0HX</p></div><div class=col-sm-5><div id=mapwrapper><iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2480.145781406951!2d-0.6935206844697872!3d51.56556097964468!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487663a34cd237c1%3A0xdade077d4ce23a90!2sHedsor+House!5e0!3m2!1sen!2suk!4v1500890159885\" width=450 height=300 frameborder=0 style=border:0 allowfullscreen></iframe></div></div></div></div></div><div role=tabpanel class=\"tab-pane fade\" id=stay><div class=tab-inner><div class=row><div class=\"col-sm-5 col-sm-offset-1 text-left\"><p class=lead>Where to stay?</p><ul><li>Chequers Inn - High Wycombe (2 miles)</li><li>Premier Inn - High Wycombe (5.1 miles)</li><li>Travelodge - Maidenhead (5.2 miles)</li></ul></div></div></div></div></div></div></div></div></div></div></div></div></section><section id=our-people class=light-wrapper><div class=section-inner><div class=\"wow fadeIn\"><div class=container><div class=row><div class=col-xs-12><h2 class=section-heading>Meet the Groomsmen<h2></h2></h2></div></div><div class=row style=\"margin-bottom: 40px;\"><div class=col-sm-5ths><img src=\"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/15940510_10158020981320542_3271052378048383733_n.jpg?oh=a7fee78d09b8ac05242b0ab907b05fa9&oe=5A0092A2\" alt=\"Adam Roylance\" class=\"img-responsive grayscale\"><h3 class=\"section-subheading secondary-font\"><i class=\"fa fa-male\" aria-hidden=true></i> Adam Roylance</h3></div><div class=col-sm-5ths><img src=\"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-0/p206x206/18519900_10155365920714243_6223846216862283914_n.jpg?oh=8944c1f19a5739cb21e65c7867296c15&oe=59FF50C2\" alt=\"Jenson Tagg\" class=\"img-responsive grayscale\"><h3 class=\"section-subheading secondary-font\">Jenson Tagg</h3></div><div class=col-sm-5ths><img src=\"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/1469828_10152099263884316_951495177_n.jpg?oh=8735de403a14479fb53ab7a4bba94b4d&oe=5A0CA473\" alt=\"Toby Barr\" class=\"img-responsive grayscale\"><h3 class=\"section-subheading secondary-font\">Toby Barr</h3></div><div class=col-sm-5ths><img src=\"https://scontent-lht6-1.xx.fbcdn.net/v/t31.0-8/17632014_10158282324150417_2831114810542218688_o.jpg?oh=a9ab33ccf51fd2e53165be2f2aa441e9&oe=59F0560D\" alt=\"Reece Tocker\" class=\"img-responsive grayscale\"><h3 class=\"section-subheading secondary-font\">Reece Tocker</h3></div><div class=col-sm-5ths><img src=\"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/13528729_10209711859297751_5897795310314393633_n.jpg?oh=8a0563b8b9ead8a1e3135726b0ce122c&oe=59FB477C\" alt=\"Dan Hennessy\" class=\"img-responsive grayscale\"><h3 class=\"section-subheading secondary-font\">Dan Hennessy</h3></div></div><div class=row><div class=col-xs-12><h2 class=section-heading>Meet the Bridesmaids<h2></h2></h2></div></div><div class=row><div class=col-sm-3><img src=\"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/843_10151257651277155_1030737319_n.jpg?oh=131bf1b5fead92c5eaf2d3e4a754e9f6&oe=59ECAED1\" alt=\"Freya Brook\" class=\"img-responsive grayscale\"><h3 class=\"section-subheading secondary-font\"><i class=\"fa fa-female\" aria-hidden=true></i> Freya Brook</h3></div><div class=col-sm-3><img src=\"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/12279066_10153625965766006_5962740131971583631_n.jpg?oh=40ac9a39531e91dba58e838eec1a463f&oe=59FAB94F\" alt=\"Jaely Collier\" class=\"img-responsive grayscale\"><h3 class=\"section-subheading secondary-font\">Jaely Collier</h3></div><div class=col-sm-3><img src=\"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/16998950_10154493411137309_8674191618146175489_n.jpg?oh=d40b620f5dac032f16c714edafc0b69e&oe=5A3751E1\" alt=\"Sarah McDowall\" class=\"img-responsive grayscale\"><h3 class=\"section-subheading secondary-font\">Sarah McDowall</h3></div><div class=col-sm-3><img src=\"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/10404320_10155786195150573_6464601391871969077_n.jpg?oh=e2abf67b3d115b739d451ec487e7e705&oe=5A026B4C\" alt=\"Alejandra Paixão\" class=\"img-responsive grayscale\"><h3 class=\"section-subheading secondary-font\">Alejandra Paixão</h3></div></div></div></div></div></section><footer id=rsvp class=white-wrapper><div class=container><div class=row><div class=\"col-md-12 text-center\"><div ng-hide=vm.person.formCompleted><h4 class=footer-goodbye>Will we be seeing you on our special day?</h4><button class=\"btn btn-primary mt30\" ng-click=vm.attendingForm(true)>Yes</button> <button class=\"btn btn-primary mt30\" ng-click=vm.attendingForm(false)>No</button></div></div><hr class=\"col-sm-12 thin-hr\"><div class=section-inner><div class=\"col-xs-12 col-sm-8 col-sm-offset-2 animated\" id=contact ng-if=\"vm.attending || vm.attending === false\"><div id=message></div><form method=post class=\"main-contact-form wow\" ng-class=\"vm.formComplete ? \'fadeOut\' : \'fadeIn\'\"><div ng-if=vm.attending><h3>Thank you for attending!</h3><h4>Please fill out the RSVP form below.</h4></div><div ng-if=\"vm.attending === false\"><h3>We\'re sad that you cannot make it.</h3><h4>Please leave us a message if you like.</h4></div><br><br><br><div class=form-group><label for=name>Name</label> <input type=text class=form-control name=name id=name ng-value=vm.person.name value=\"{{ vm.person.name }}\" ng-model=vm.post.name></div><div class=\"form-group has-error\" ng-show=vm.validationMsg.menu><label class=control-label>Please select a menu choice</label></div><div class=form-group ng-hide=!vm.check style=\"float: left;\" ng-if=\"vm.person.collective && vm.attending\" ng-repeat=\"per in vm.person.selective track by $index\"><label for=name>Meal preferences for {{ per.name }}</label><div class=funkyradio><div class=funkyradio-default><input type=radio name={{per.name}}-menu id={{per.name}}-menu-lamb value=\"{{per.name}} - Lamb\" ng-model=vm.post.menu[$index] ng-click=\"vm.validationMsg.menu = false;\"> <label for={{per.name}}-menu-lamb>Lamb</label></div><div class=funkyradio-default><input type=radio name={{per.name}}-menu id={{per.name}}-menu-fish value=\"{{per.name}} - Fish\" ng-model=vm.post.menu[$index]> <label for={{per.name}}-menu-fish>Fish</label></div><div class=funkyradio-default><input type=radio name={{per.name}}-menu id={{per.name}}-menu-vegetarian value=\"{{per.name}} - Vegetarian\" ng-model=vm.post.menu[$index]> <label for={{per.name}}-menu-vegetarian>Vegetarian</label></div></div></div><div class=form-group ng-hide=!vm.check style=\"float: left;\" ng-if=\"!vm.person.collective && vm.attending\"><label for=name>Meal preferences</label><div class=funkyradio><div class=funkyradio-default><input type=radio name={{vm.person.name}}-menu id={{vm.person.name}}-menu-lamb value=\"{{vm.person.name}} - Lamb\" ng-model=vm.post.menu> <label for={{vm.person.name}}-menu-lamb>Lamb</label></div><div class=funkyradio-default><input type=radio name={{vm.person.name}}-menu id={{vm.person.name}}-menu-fish value=\"{{vm.person.name}} - Fish\" ng-model=vm.post.menu> <label for={{vm.person.name}}-menu-fish>Fish</label></div><div class=funkyradio-default><input type=radio name={{vm.person.name}}-menu id={{vm.person.name}}-menu-vegetarian value=\"{{vm.person.name}} - Vegetarian\" ng-model=vm.post.menu> <label for={{vm.person.name}}-menu-vegetarian>Vegetarian</label></div></div></div><div class=form-group style=\"float: left; clear: both; width: 100%;\" ng-if=vm.attending><label for>Dietary requirements</label> <input type=text class=form-control name=diet placeholder=\"Dietary requirements\" id=diet ng-model=vm.post.diet value=\"{{ vm.post.diet }}\"></div><div class=form-group style=\"clear: both;\"><label for=comments>Leave us a message</label> <textarea ng-if=\"vm.attending || vm.attending === false\" name=comments class=\"form-control wow fadeIn\" id=comments placeholder=\"Your Message *\" required data-validation-required-message=\"Please enter a message.\" ng-model=vm.post.message></textarea></div><div class=form-group><input ng-if=\"vm.attending || vm.attending === false\" class=\"btn btn-primary mt30\" type=submit name=submit value=Submit ng-click=vm.formAuth(vm.post)></div></form></div></div><div class=\"col-md-12 text-center wow fadeIn\"><span class=copyright>Copyright 2017. Designed &amp; developed by Carl Taylor</span></div></div></div></footer>");
 $templateCache.put("app/widgets/widget-header.html","<div class=widget-head ng-class=\"{\'collapsive\': allowCollapse === \'true\'}\" ng-click=toggleContent()><div class=\"page-title pull-left\">{{title}}</div><small class=page-title-subtle ng-show=subtitle>({{subtitle}})</small><div class=\"widget-icons pull-right\"></div><small class=\"pull-right page-title-subtle\" ng-show=rightText>{{rightText}}</small><div class=clearfix></div></div>");}]);
