@@ -3,9 +3,9 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-12 text-center mb100">
-          <h2 class="section-heading" ng-if="vm.person.name">Hi {{vm.person.name}}</h2>
+          <h2 class="section-heading" ng-if="vm.person.name">Dear {{vm.person.name}}</h2>
           <hr class="thin-hr">
-          <h3 class="section-subheading secondary-font">Join us on our special occasion.</h3>
+          <h3 class="section-subheading secondary-font">Join us on our special occasion</h3>
         </div>
       </div>
     </div>
@@ -13,13 +13,9 @@
       <div class="row">
         <div class="col-md-5 col-md-offset-1 wow fadeIn">
           <img src="https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/17190906_10158357508400224_927789344308959818_n.jpg?oh=8a317f5268fd41299174c7c45601b6a7&oe=5A06818C" class="img-responsive mb30">
-          <p class="text-center">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt
-            mollitia animi, id est laborum et dolorum fuga.</p>
         </div>
         <div class="col-md-5 wow fadeIn">
-          <img src="https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/20257927_10155668154587642_6519342810189991287_n.jpg?oh=ff1e3d294316e44a5d9fb558be0dce9a&oe=59F25D41" class="img-responsive mb30">
-          <p class="text-center">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt
-            mollitia animi, id est laborum et dolorum fuga.</p>
+          <p class="text-center">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.</p>
         </div>
       </div>
     </div>
@@ -37,7 +33,7 @@
       <div class="container text-center the-date">
         <div class="row">
           <div class="col-xs-12">
-            <p class="lead a-quote secondary-font mb0">We hope to see you on our wedding day!</p>
+            <p class="lead a-quote secondary-font mb0">We hope to see you on our special day!</p>
           </div>
         </div>
       </div>
@@ -74,7 +70,7 @@
                 <div class="tab-content" id="tabs-collapse">
                   <div role="tabpanel" class="tab-pane fade in active" id="when">
                     <div class="tab-inner">
-                      <p class="lead secondary-font">16th February 2018<br />@ 2pm</p>
+                      <p class="lead secondary-font">16th February 2018<br />at 2 o'clock</p>
                     </div>
                   </div>
                   <div role="tabpanel" class="tab-pane fade" id="where">
@@ -188,22 +184,20 @@
             <button class="btn btn-primary mt30" ng-click="vm.attendingForm(true)">Yes</button>
             <button class="btn btn-primary mt30" ng-click="vm.attendingForm(false)">No</button>
           </div>
+          <div ng-show="vm.person.formCompleted">
+            <h2 class="secondary-font">Thank you for the RSVP!</h2>
+            <div ng-if="vm.person.attending">
+              <h3>We're excited that you can make it!</h3>
+            </div>
+            <div ng-if="vm.person.attending === false">
+              <h3>We're sorry that you're not able to make it.</h3>
+            </div>
+          </div>
           <hr class="thin-hr" />
         </div>
-        <div class="col-xs-12 col-sm-8 col-sm-offset-2 animated" id="contact" ng-if="vm.attending || vm.attending === false">
+        <div class="col-xs-12 col-sm-8 col-sm-offset-2 animated" id="contact" ng-if="vm.attending">
           <div id="message"></div>
-          <form method="post" class="main-contact-form wow" ng-class="vm.formComplete ? 'fadeOut' : 'fadeIn'">
-            <div ng-if="vm.attending">
-              <h3>Thank you for attending!</h3>
-              <h4>Please fill out the RSVP form below.</h4>
-            </div>
-
-            <div ng-if="vm.attending === false">
-              <h3>We're sad that you cannot make it.</h3>
-              <h4>Please leave us a message if you like.</h4>
-            </div>
-
-            <br /><br /><br />
+          <form method="post" class="main-contact-form wow" ng-if="vm.person.formCompleted === false">
 
             <div class="form-group">
               <label for="name">Name</label>
@@ -218,12 +212,8 @@
               <label for="name">Meal preferences for {{ per.name }}</label>
               <div class="funkyradio">
                 <div class="funkyradio-default">
-                  <input type="radio" name="{{per.name}}-menu" id="{{per.name}}-menu-lamb" value="{{per.name}} - Lamb" ng-model="vm.post.menu[$index]" ng-click="vm.validationMsg.menu = false;" />
-                  <label for="{{per.name}}-menu-lamb">Lamb</label>
-                </div>
-                <div class="funkyradio-default">
-                  <input type="radio" name="{{per.name}}-menu" id="{{per.name}}-menu-fish" value="{{per.name}} - Fish" ng-model="vm.post.menu[$index]" />
-                  <label for="{{per.name}}-menu-fish">Fish</label>
+                  <input type="radio" name="{{per.name}}-menu" id="{{per.name}}-menu-pork" value="{{per.name}} - Pork" ng-model="vm.post.menu[$index]" ng-click="vm.validationMsg.menu = false;" />
+                  <label for="{{per.name}}-menu-pork">Pork</label>
                 </div>
                 <div class="funkyradio-default">
                   <input type="radio" name="{{per.name}}-menu" id="{{per.name}}-menu-vegetarian" value="{{per.name}} - Vegetarian" ng-model="vm.post.menu[$index]" />
@@ -236,16 +226,12 @@
               <label for="name">Meal preferences</label>
               <div class="funkyradio">
                 <div class="funkyradio-default">
-                  <input type="radio" name="{{vm.person.name}}-menu" id="{{vm.person.name}}-menu-lamb" value="{{vm.person.name}} - Lamb" ng-model="vm.post.menu" />
-                  <label for="{{vm.person.name}}-menu-lamb">Lamb</label>
+                  <input type="radio" name="{{per.name}}-menu" id="{{per.name}}-menu-pork" value="{{per.name}} - Pork" ng-model="vm.post.menu[$index]" ng-click="vm.validationMsg.menu = false;" />
+                  <label for="{{per.name}}-menu-pork">Pork</label>
                 </div>
                 <div class="funkyradio-default">
-                  <input type="radio" name="{{vm.person.name}}-menu" id="{{vm.person.name}}-menu-fish" value="{{vm.person.name}} - Fish" ng-model="vm.post.menu" />
-                  <label for="{{vm.person.name}}-menu-fish">Fish</label>
-                </div>
-                <div class="funkyradio-default">
-                  <input type="radio" name="{{vm.person.name}}-menu" id="{{vm.person.name}}-menu-vegetarian" value="{{vm.person.name}} - Vegetarian" ng-model="vm.post.menu" />
-                  <label for="{{vm.person.name}}-menu-vegetarian">Vegetarian</label>
+                  <input type="radio" name="{{per.name}}-menu" id="{{per.name}}-menu-vegetarian" value="{{per.name}} - Vegetarian" ng-model="vm.post.menu[$index]" />
+                  <label for="{{per.name}}-menu-vegetarian">Vegetarian</label>
                 </div>
               </div>
             </div>

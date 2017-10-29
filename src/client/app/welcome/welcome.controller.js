@@ -82,9 +82,8 @@
 
     function postPerson(userData, person) {
       dataservice.postPerson(userData).then(function(response) {
-        vm.formComplete = true;
         person.formCompleted = true;
-        console.log(person);
+        person.attending = userData.attending;
         dataservice.updatePerson(person).then(function(r) {
 
         });
