@@ -56,20 +56,34 @@
 
     function attendingForm(bool) {
       vm.attending = bool;
-      vm.post.attending = true; // Set attending to true
 
-      $timeout(function() {
-        angular.element('html, body').stop().animate({
-          scrollTop: angular.element('#contact').offset().top
-        }, 1000, function() {
-          angular.element('#contact').fadeIn();
-        });
-      }, 100);
+      if(vm.attending === true) {
+        vm.post.attending = true; // Set attending to true
 
-      if (vm.attending === false) {
-        vm.menu = ''; // Clear menu model
+        if(vm.person.eveningGuest === true) {
+          postPerson(vm.post, vm.person);
+        } else if(vm.person.eveningGuest === false) {
+          $timeout(function() {
+            angular.element('html, body').stop().animate({
+              scrollTop: angular.element('#contact').offset().top - 93
+            }, 1000, function() {
+              angular.element('#contact').fadeIn();
+            });
+          }, 100);
+        }
+      } else if (vm.attending === false) {
         vm.post.attending = false; // Set attending to false
-        dataservice.postNotAttending(vm.post);
+        vm.post.menu = ''; // Clear menu model
+
+        if(vm.person.eveningGuest === true) {
+          postPerson(vm.post, vm.person);
+        } else if(vm.person.eveningGuest === false) {
+          dataservice.postNotAttending(vm.post).then(function(response) {
+            vm.person.formCompleted = true;
+            vm.person.attending = vm.post.attending;
+            dataservice.updatePerson(vm.person);
+          });
+        }
       }
     }
 
@@ -84,9 +98,7 @@
       dataservice.postPerson(userData).then(function(response) {
         person.formCompleted = true;
         person.attending = userData.attending;
-        dataservice.updatePerson(person).then(function(r) {
-
-        });
+        dataservice.updatePerson(person);
       });
     }
 

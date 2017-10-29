@@ -161,6 +161,17 @@ module.exports = {
         { name: 'Rebecca' }
       ],
       uniqueUri: 'alexanderrebecca'
+    },
+    {
+      id: 16,
+      collective: true,
+      name: 'Tanya & Steve',
+      personalMessage: '',
+      selective: [
+        { name: 'Alexander' },
+        { name: 'Rebecca' }
+      ],
+      uniqueUri: 'alexanderrebecca'
     }
   ]
 };
