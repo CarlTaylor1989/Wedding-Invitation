@@ -45,12 +45,21 @@
     }
 
     function formAuth(data) {
-      // Validation on Menu
-      if (vm.post.menu.length < vm.person.selective.length) {
-        vm.validationMsg.menu = true;
-        return false;
+      if (vm.person.collective) {
+        if ((data.menu === undefined || data.menu.length === 0) || data.menu.length < vm.person.selective.length) {
+          vm.validationMsg.menu = true;
+          return false;
+        } else {
+          postPerson(data, vm.person);
+        }
       } else {
-        postPerson(vm.post, vm.person);
+        debugger;
+        if (data.menu === undefined || data.menu.length === 0) {
+          vm.validationMsg.menu = true;
+          return false;
+        } else {
+          postPerson(data, vm.person);
+        }
       }
     }
 
@@ -95,10 +104,13 @@
     }
 
     function postPerson(userData, person) {
+      vm.formLoading = true;
       dataservice.postPerson(userData).then(function(response) {
         person.formCompleted = true;
         person.attending = userData.attending;
-        dataservice.updatePerson(person);
+        dataservice.updatePerson(person).then(function() {
+          vm.formLoading = false;
+        });
       });
     }
 
