@@ -6,9 +6,14 @@
   }
   .carousel-inner {
     .item {
-      top: -200px;
+      top: 0px;
       img {
         width: 100%;
+      }
+    }
+    @media (min-width: 768px) {
+      .item {
+        top: -200px;
       }
     }
   }

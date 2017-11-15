@@ -27,7 +27,7 @@
 
     function getPerson(id) {
       return $http({
-        url: PEOPLE_ENDPOINT + '?q={id:'+ id +'}&apiKey=uOw09VD_O3zuzZMHw4Bb04gYgDPk44tK',
+        url: PEOPLE_ENDPOINT + '?q={uniqueUri:"'+ id +'"}&apiKey=uOw09VD_O3zuzZMHw4Bb04gYgDPk44tK',
         method: 'GET'
       }).then(function(response) {
         console.log(response.data[0]);
@@ -51,7 +51,7 @@
 
     function updatePerson(data) {
       return $http({
-        url: PEOPLE_ENDPOINT + '?q={id:'+ data.id +'}&apiKey=uOw09VD_O3zuzZMHw4Bb04gYgDPk44tK',
+        url: PEOPLE_ENDPOINT + '?q={uniqueUri:"'+ data.uniqueUri +'"}&apiKey=uOw09VD_O3zuzZMHw4Bb04gYgDPk44tK',
         method: 'PUT',
         data: data
       }).then(function(response) {

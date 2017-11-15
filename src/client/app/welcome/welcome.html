@@ -49,7 +49,7 @@
         <div class="row">
           <div class="col-xs-12" role="tabpanel">
             <div class="row">
-              <div class="col-xs-4 col-sm-12">
+              <div class="col-xs-12 col-sm-12">
                 <ul class="nav nav-justified icon-tabs" id="nav-tabs" role="tablist">
                   <li role="presentation" class="active">
                     <a href="#when" role="tab" data-toggle="tab">
@@ -73,11 +73,11 @@
                   </li>
                 </ul>
               </div>
-              <div class="col-xs-8 col-sm-12 mt60">
+              <div class="col-xs-12 col-sm-12 mt60">
                 <div class="tab-content" id="tabs-collapse">
                   <div role="tabpanel" class="tab-pane fade in active" id="when">
                     <div class="tab-inner" style="padding-bottom: 0;">
-                      <p class="lead secondary-font" style="margin-bottom: 0;" ng-if="vm.person.eveningGuest === true && vm.person.id !== 250">Friday 16th February 2018<br />at 7 o'clock</p>
+                      <p class="lead secondary-font" style="margin-bottom: 0;" ng-if="vm.person.eveningGuest === true && vm.person.id !== 250">Friday 16th February 2018<br />at 7:30pm</p>
                       <p class="lead secondary-font" style="margin-bottom: 0;" ng-if="vm.person.eveningGuest === false && vm.person.id !== 250">Friday 16th February 2018<br />at 2 o'clock</p>
                       <p class="lead secondary-font" style="margin-bottom: 0;" ng-if="vm.person.id === 250">Friday 16th February 2018</p>
                     </div>
@@ -121,7 +121,7 @@
                             <li>Premier Inn - High Wycombe (5.1 miles)</li>
                             <li>Travelodge - Maidenhead (5.2 miles)</li>
                           </ul>
-                          <p><a href="downloads/hotels-near-hedsor.pdf">Click here for a full list of nearby hotels.</a></p>
+                          <p><a target="_self" href="downloads/hotels-near-hedsor.pdf" download="hotels-near-hedsor.pdf">Click here for a full list of nearby hotels.</a></p>
                         </div>
                       </div>
                     </div>
@@ -204,7 +204,7 @@
               <h4 class="footer-goodbye">Will we be seeing you at our wedding reception?</h4>
             </div>
             <div ng-if="vm.person.eveningGuest === false">
-              <h4 class="footer-goodbye">Will we be seeing you on our special day?</h4>
+              <h4 class="footer-goodbye">Will we be seeing you on our wedding day?</h4>
             </div>
 
             <hr class="thin-hr" />
@@ -216,7 +216,10 @@
             <hr class="thin-hr" />
             <div ng-if="vm.person.attending">
               <h3 class="section-subheading secondary-font">We're excited that you can make it!</h3>
+              <br /><br />
               <img src="images/rsvp.jpg" alt="Excited!" style="width: 300px;" />
+              <br /><br />
+              <h3 class="section-subheading" style="font-size: 26px;">#ItTakesTwoToTaylor</h3>
             </div>
             <div ng-if="vm.person.attending === false">
               <h3 class="section-subheading secondary-font">We're sorry that you're not able to make it.</h3>
@@ -276,9 +279,9 @@
 
             <div class="form-group mt30">
               <input ng-if="vm.attending || vm.attending === false" class="btn btn-primary" type="submit" name="submit" value="Submit" ng-click="vm.formAuth(vm.post)" />
+              <img src="images/spinner.gif" width="80" ng-if="vm.formLoading">
             </div>
           </form>
-          <img src="images/spinner.gif" width="80" ng-if="vm.formLoading">
         </div>
       </div>
     </div>

@@ -399,6 +399,10 @@ fieldset[disabled] .btn-primary.active {
     display: inline-block;
 }
 
+.navbar-header {
+  background-color: #fff;
+}
+
 .navbar-default {
     border-color: transparent;
     background-color: #182326
@@ -424,7 +428,34 @@ fieldset[disabled] .btn-primary.active {
 }
 
 .navbar-default .navbar-collapse {
-    border-color: rgba(255, 255, 255, .02)
+  border-color: rgba(255, 255, 255, .02);
+  background-color: #fff;
+  .nav {
+    li {
+      a {
+        color: #333;
+        &.navbar-brand {
+          color: #333;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .navbar-default .navbar-collapse {
+    background-color: transparent;
+    .nav {
+      li {
+        a {
+          color: #fff;
+          &.navbar-brand {
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
 }
 
 .navbar-default .navbar-toggle,
@@ -435,7 +466,7 @@ fieldset[disabled] .btn-primary.active {
 }
 
 .navbar-default .navbar-toggle .icon-bar {
-    background-color: #fff
+    background-color: #333
 }
 
 .caret {
@@ -1219,7 +1250,13 @@ footer.white-wrapper .social-links li a {
 }
 
 .icon-tabs li {
-    border-right: 1px solid #111;
+    border-right: transparent;
+}
+
+@media (min-width: 768px) {
+  .icon-tabs li {
+      border-right: 1px solid #111;
+  }
 }
 
 .icon-tabs li a {
@@ -1232,7 +1269,7 @@ footer.white-wrapper .social-links li a {
 }
 
 .icon-tabs li:last-of-type, .dark-wrapper .icon-tabs li:last-of-type {
-    border-right: none;
+    // border-right: none;
 }
 
 .dark-wrapper .icon-tabs li {
@@ -1337,6 +1374,12 @@ footer.white-wrapper .social-links li a {
     letter-spacing: 2px;
 }
 
+#stay {
+  ul {
+    padding-left: 20px;
+  }
+}
+
 /*-----------------------------------------------------------------------------------*/
 /*  19 - MEDIA QUERIES
 /*-----------------------------------------------------------------------------------*/
@@ -1426,7 +1469,6 @@ footer.white-wrapper .social-links li a {
      #when .lead{
         font-size: 40px;
         font-weight: 400;
-        text-transform: uppercase;
         letter-spacing: 2px;
     }
 }
