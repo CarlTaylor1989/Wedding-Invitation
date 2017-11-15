@@ -20,6 +20,7 @@
     vm.attending = '';
     vm.attendingForm = attendingForm;
     vm.check = true;
+    vm.closeForm = false;
     vm.formAuth = formAuth;
     vm.formComplete = false;
     vm.person = person;
@@ -104,6 +105,7 @@
     }
 
     function postPerson(userData, person) {
+      vm.closeForm = true;
       vm.formLoading = true;
       dataservice.postPerson(userData).then(function(response) {
         person.formCompleted = true;

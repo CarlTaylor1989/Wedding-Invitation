@@ -18,6 +18,15 @@
         config: {
           url: '/',
           templateUrl: 'app/welcome/welcome.html',
+          resolve: {
+            person: function(dataservice, $filter, $stateParams) {
+              if($stateParams.personId) {
+                return dataservice.getPerson($stateParams.personId);
+              } else {
+                return dataservice.getPerson(250);
+              }
+            }
+          },
           controller: 'WelcomeController',
           controllerAs: 'vm',
           title: 'welcome',
@@ -34,7 +43,11 @@
           templateUrl: 'app/welcome/welcome.html',
           resolve: {
             person: function(dataservice, $filter, $stateParams) {
-              return dataservice.getPerson($stateParams.personId);
+              if($stateParams.personId) {
+                return dataservice.getPerson($stateParams.personId);
+              } else {
+                return dataservice.getPerson(250);
+              }
             }
           },
           controller: 'WelcomeController',
