@@ -20,12 +20,9 @@
           templateUrl: 'app/welcome/welcome.html',
           resolve: {
             person: function(dataservice, $filter, $stateParams) {
-              debugger;
               if($stateParams.personId) {
-                debugger;
                 return dataservice.getPerson($stateParams.personId);
               } else {
-                debugger;
                 return dataservice.getPerson('all');
               }
             }
