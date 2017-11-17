@@ -77,7 +77,7 @@
             var msg = 'Error routing to ' + destination + '. ' +
               (error.data || '') + '. <br/>' + (error.statusText || '') +
               ': ' + (error.status || '');
-            logger.warning(msg, [toState]);
+            // logger.warning(msg, [toState]);
             $location.path('/');
           }
         );

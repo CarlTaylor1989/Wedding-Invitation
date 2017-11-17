@@ -61,7 +61,7 @@
        * @example
        *     throw { message: 'error message we added' };
        */
-      logger.error(exception.message, errorData);
+      // logger.error(exception.message, errorData);
 
       $delegate(exception, cause);
     };

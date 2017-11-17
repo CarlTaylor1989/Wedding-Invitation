@@ -41,7 +41,7 @@
     function activate() {
       var promises = [getMessageCount()];
       return $q.all(promises).then(function() {
-        logger.info('Activated Welcome View');
+        // logger.info('Activated Welcome View');
       });
     }
 
