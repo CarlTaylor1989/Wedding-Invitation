@@ -25,12 +25,11 @@
 
     function getMessageCount() { return $q.when(72); }
 
-    function getPerson(id) {
+    function getPerson(name) {
       return $http({
-        url: PEOPLE_ENDPOINT + '?q={uniqueUri:"'+ id +'"}&apiKey=uOw09VD_O3zuzZMHw4Bb04gYgDPk44tK',
+        url: PEOPLE_ENDPOINT + '?q={uniqueUri:"'+ name +'"}&apiKey=uOw09VD_O3zuzZMHw4Bb04gYgDPk44tK',
         method: 'GET'
       }).then(function(response) {
-        console.log(response.data[0]);
         return response.data[0];
       }, function(response) {
         return exception.catcher('XHR Failed for getPerson')(response);

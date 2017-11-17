@@ -20,10 +20,13 @@
           templateUrl: 'app/welcome/welcome.html',
           resolve: {
             person: function(dataservice, $filter, $stateParams) {
+              debugger;
               if($stateParams.personId) {
+                debugger;
                 return dataservice.getPerson($stateParams.personId);
               } else {
-                return dataservice.getPerson(250);
+                debugger;
+                return dataservice.getPerson('all');
               }
             }
           },
@@ -46,7 +49,7 @@
               if($stateParams.personId) {
                 return dataservice.getPerson($stateParams.personId);
               } else {
-                return dataservice.getPerson(250);
+                return dataservice.getPerson('all');
               }
             }
           },
