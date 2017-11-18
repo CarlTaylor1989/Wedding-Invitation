@@ -46,7 +46,6 @@
     }
 
     function formAuth(data) {
-      console.log(data);
       if (vm.person.collective) {
         if ((data.menu === undefined || data.menu.length === 0) || data.menu.length < vm.person.selective.length) {
           vm.validationMsg.menu = true;
@@ -55,7 +54,6 @@
           postPerson(data, vm.person);
         }
       } else {
-        debugger;
         if (data.menu === undefined || data.menu.length === 0) {
           vm.validationMsg.menu = true;
           return false;
