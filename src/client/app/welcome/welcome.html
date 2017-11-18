@@ -259,11 +259,11 @@
               <label for="name">Meal preference</label>
               <div class="funkyradio">
                 <div class="funkyradio-default">
-                  <input type="radio" name="{{vm.person.name}}-menu" id="{{vm.person.name}}-menu-pork" value="{{vm.person.name}} - Pork" ng-model="vm.post.menu[$index]" ng-click="vm.validationMsg.menu = false;" />
+                  <input type="radio" name="{{vm.person.name}}-menu" id="{{vm.person.name}}-menu-pork" value="{{vm.person.name}} - Pork" ng-model="vm.post.menu" ng-click="vm.validationMsg.menu = false;" />
                   <label for="{{vm.person.name}}-menu-pork">Pork</label>
                 </div>
                 <div class="funkyradio-default">
-                  <input type="radio" name="{{vm.person.name}}-menu" id="{{vm.person.name}}-menu-vegetarian" value="{{vm.person.name}} - Vegetarian" ng-model="vm.post.menu[$index]" ng-click="vm.validationMsg.menu = false;" />
+                  <input type="radio" name="{{vm.person.name}}-menu" id="{{vm.person.name}}-menu-vegetarian" value="{{vm.person.name}} - Vegetarian" ng-model="vm.post.menu" ng-click="vm.validationMsg.menu = false;" />
                   <label for="{{vm.person.name}}-menu-vegetarian">Vegetarian</label>
                 </div>
               </div>
